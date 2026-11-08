@@ -9,7 +9,7 @@
    GitHub. (data.js no cambia al cambiar el PIN.)
 
    ┌──────────────────────────────────────────────────────────────────────┐
-   │  PIN real en producción (hash abajo). El demo NITRO27 ya no sirve.   │
+   │  PIN del preview (hash abajo). Cambiar antes de promocionar a prod.   │
    └──────────────────────────────────────────────────────────────────────┘
    ========================================================================== */
 "use strict";
@@ -17,7 +17,7 @@
 window.ADMIN_ACCESO = {
   /* sha256Hex("nitrotoon:" + PIN real) — el PIN solo existe en la cabeza
      del administrador: nunca en archivos, chats ni capturas. */
-  hash: "41a959222edfd196842cbacf94c7f9895f45ea7232ea14c6be332b09882ae058",
+  hash: "a3950a7a88e460e20c54da778812428d9761eaf7d2a4fbab63d38a3112d18a63",
 
   /* Salto que se antepone al PIN antes de hashear */
   salto: "nitrotoon",

@@ -73,8 +73,9 @@ Abre **`admin.html`** e introduce tu **PIN**. El dashboard tiene 3 pestañas:
 - El **PIN nunca vive en el código**: solo su hash SHA-256 con salto
   (`js/admin-acceso.js`). 5 intentos fallidos bloquean 15 minutos; la
   sesión caduca sola (8 h) y vive solo en tu navegador.
-- **PIN de demostración: `NITRO27`** — cámbialo antes de publicar el sitio
-  real (pestaña Publicar → Cambiar PIN, y sube el `admin-acceso.js` nuevo).
+- **PIN del preview: `toonito`** — este es el PIN de la rama de preview.
+  **Debe cambiarse antes de promocionar a producción** (pestaña Publicar
+  → Cambiar PIN, y sube el `admin-acceso.js` nuevo).
 
 Actualización manual (sin dashboard): todo lo visible vive en **`data.js`**.
 
