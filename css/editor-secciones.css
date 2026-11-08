@@ -1,0 +1,482 @@
+/* ==========================================================================
+   NITROTOON · editor-secciones.css — EDITOR DE LA VITRINA POR SECCIONES (F1)
+   --------------------------------------------------------------------------
+   Estilos del editor por secciones. Usa SOLO los tokens de la paleta
+   cerrada (tokens.css): nada de colores nuevos, nada de azules.
+
+   Semáforo: los tres niveles se distinguen también por el TEXTO («espacio
+   de sobra», «al límite», «se pasa»), no solo por el color: así funciona
+   para quien no distingue el verde del rojo.
+   ========================================================================== */
+
+/* ==========================================================================
+   F3 · BARRA DE ESTADO PERMANENTE Y VISTA PREVIA DEL BORRADOR
+   ========================================================================== */
+
+/* ---- Barra de estado (siempre visible en el dashboard) ------------------- */
+.barra-estado {
+  display: flex;
+  align-items: center;
+  gap: .55rem;
+  flex-wrap: wrap;
+  padding: .5rem .8rem;
+  border-radius: var(--radio-s);
+  border: 1px solid var(--c-borde-fuerte);
+  background: var(--c-superficie);
+  font-size: var(--fs-pequeno);
+  color: var(--c-perla);
+  margin-block-end: var(--sp-2);
+}
+.barra-estado__punto {
+  width: .6rem;
+  height: .6rem;
+  border-radius: 50%;
+  background: var(--c-perla);
+  flex: none;
+}
+.barra-estado__texto { flex: 1 1 14rem; }
+.barra-estado__meta {
+  font-size: var(--fs-micro);
+  color: var(--c-perla);
+  opacity: .85;
+  white-space: nowrap;
+}
+
+/* Los tres estados se distinguen también por el TEXTO, no solo por el color. */
+.barra-estado--ok { border-color: rgba(162, 174, 21, .55); }
+.barra-estado--ok .barra-estado__punto { background: var(--c-acento); }
+.barra-estado--ok .barra-estado__texto { color: var(--c-acento); }
+
+.barra-estado--pend { border-color: var(--c-primario); }
+.barra-estado--pend .barra-estado__punto { background: var(--c-primario); }
+.barra-estado--pend .barra-estado__texto { color: var(--c-primario); font-weight: 700; }
+
+.barra-estado--medio { border-color: var(--c-borde-fuerte); }
+.barra-estado--medio .barra-estado__punto { background: var(--c-texto); }
+.barra-estado--medio .barra-estado__texto { color: var(--c-texto); }
+
+/* Fallo de guardado: el estado más grave. Se distingue por texto además de
+   por color, y con borde grueso para que no pase desapercibido. */
+.barra-estado--error {
+  border-color: var(--c-texto);
+  border-width: 2px;
+  background: rgba(242, 183, 5, .12);
+}
+.barra-estado--error .barra-estado__punto {
+  background: var(--c-primario);
+  animation: pulso-error 1.6s ease-in-out infinite;
+}
+.barra-estado--error .barra-estado__texto { color: var(--c-texto); font-weight: 700; }
+@keyframes pulso-error {
+  0%, 100% { opacity: 1; }
+  50% { opacity: .35; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .barra-estado--error .barra-estado__punto { animation: none; }
+}
+
+/* ==========================================================================
+   F4 · REVISIÓN PREVIA Y ÁRBOL DE PUBLICACIÓN
+   ========================================================================== */
+
+/* ---- Lista de revisión --------------------------------------------------- */
+.lista-revision {
+  display: grid;
+  gap: .5rem;
+  margin-block: var(--sp-2);
+  padding: 0;
+  list-style: none;
+}
+.lista-revision__item {
+  display: flex;
+  align-items: flex-start;
+  gap: .55rem;
+  font-size: var(--fs-pequeno);
+  line-height: 1.5;
+  padding: .5rem .7rem;
+  border-radius: var(--radio-s);
+  border: 1px solid var(--c-borde);
+  background: var(--c-fondo);
+  color: var(--c-perla);
+}
+.lista-revision__marca {
+  flex: none;
+  width: 1.3rem;
+  height: 1.3rem;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  font-weight: 700;
+  font-size: var(--fs-micro);
+  border: 1px solid currentColor;
+}
+.lista-revision__item--ok {
+  border-color: rgba(162, 174, 21, .5);
+  color: var(--c-acento);
+}
+.lista-revision__item--pega {
+  border-color: var(--c-texto);
+  color: var(--c-texto);
+  background: rgba(242, 183, 5, .1);
+  font-weight: 600;
+}
+.lista-revision__item--pega .lista-revision__marca { background: var(--c-primario); color: var(--c-fondo); border-color: var(--c-primario); }
+.lista-revision__item--aviso {
+  border-color: rgba(242, 183, 5, .45);
+  color: var(--c-primario);
+}
+
+/* ---- Árbol de publicación ------------------------------------------------ */
+.arbol-publicacion {
+  display: grid;
+  gap: .5rem;
+  margin-block: var(--sp-2);
+  padding: 0;
+  list-style: none;
+  counter-reset: paso;
+}
+.arbol-publicacion__paso {
+  border: 1px solid var(--c-borde);
+  border-radius: var(--radio-s);
+  background: var(--c-fondo);
+}
+.arbol-publicacion__paso--hecho {
+  border-color: rgba(162, 174, 21, .55);
+  background: rgba(162, 174, 21, .07);
+}
+.arbol-publicacion__etiqueta {
+  display: flex;
+  align-items: flex-start;
+  gap: .6rem;
+  padding: .65rem .8rem;
+  cursor: pointer;
+  font-size: var(--fs-pequeno);
+  line-height: 1.45;
+  color: var(--c-perla);
+}
+.arbol-publicacion__etiqueta input {
+  width: 1.15rem;
+  height: 1.15rem;
+  accent-color: var(--c-acento);
+  flex: none;
+  margin-block-start: .15rem;
+}
+.arbol-publicacion__etiqueta strong {
+  display: block;
+  color: var(--c-texto);
+  font-size: var(--fs-cuerpo);
+  margin-block-end: .1rem;
+}
+.arbol-publicacion__paso--hecho .arbol-publicacion__etiqueta strong { color: var(--c-acento); }
+
+@media (max-width: 48em) {
+  .lista-revision__item { font-size: var(--fs-micro); }
+  .arbol-publicacion__etiqueta { font-size: var(--fs-micro); padding: .55rem .6rem; }
+}
+
+/* ---- La franja .franja-borrador vive en componentes.css ---------------
+   Se pinta en la PORTADA (index.html?borrador=1), y la portada no carga este
+   archivo: si estuviera aquí, no tendría estilo. ------------------------- */
+
+/* ---- Móvil ---------------------------------------------------------------- */
+@media (max-width: 48em) {
+  .barra-estado { font-size: var(--fs-micro); padding: .45rem .6rem; }
+  .barra-estado__meta { white-space: normal; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .barra-estado { transition: none; }
+}
+
+/* ---- Contenedor general -------------------------------------------------- */
+#editor-secciones {
+  display: grid;
+  gap: var(--sp-3);
+}
+
+/* ---- Una tarjeta de sección ---------------------------------------------- */
+.seccion-editor {
+  background: var(--c-superficie);
+  border: 1px solid var(--c-borde);
+  border-radius: var(--radio-m);
+  padding: var(--sp-3);
+  display: grid;
+  gap: var(--sp-2);
+  transition: border-color .18s ease;
+}
+.seccion-editor:hover { border-color: var(--c-borde-fuerte); }
+.seccion-editor--activa {
+  border-color: var(--c-primario);
+  box-shadow: 0 0 0 1px var(--c-primario);
+}
+/* El evento vigente es la sección que manda: se marca con el acento. */
+.seccion-editor--fija {
+  border-left: 3px solid var(--c-primario);
+}
+/* Retirada del sitio: se ve apagada y con aviso. */
+.seccion-editor.seccion--retirada {
+  opacity: .62;
+  border-color: var(--c-acento);
+}
+.seccion-editor.seccion--retirada .seccion__titulo h3::after {
+  content: " · retirada del sitio";
+  font-size: var(--fs-micro);
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  color: var(--c-acento);
+}
+/* Oculta en mi vista: tachada, pero el público la sigue viendo. */
+.seccion-editor.seccion--oculta .seccion__titulo h3 {
+  text-decoration: line-through;
+  text-decoration-color: var(--c-perla);
+}
+
+/* ---- Cabecera de la tarjeta ---------------------------------------------- */
+.seccion__cabecera {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: var(--sp-2);
+  flex-wrap: wrap;
+}
+.seccion__titulo h3 {
+  font-family: var(--t-display);
+  font-size: 1.05rem;
+  letter-spacing: .06em;
+  text-transform: uppercase;
+  color: var(--c-texto);
+  margin: 0;
+}
+.seccion__titulo .texto-micro { display: block; margin-block-start: .15rem; }
+
+.seccion__acciones { display: flex; gap: .4rem; flex-wrap: wrap; }
+
+.seccion__resumen {
+  color: var(--c-perla);
+  font-size: var(--fs-pequeno);
+  line-height: 1.5;
+  max-width: var(--ancho-lectura);
+}
+
+/* ---- Los dos controles de visibilidad ------------------------------------ */
+.seccion__controles {
+  display: flex;
+  gap: var(--sp-3);
+  flex-wrap: wrap;
+  align-items: center;
+  padding-block: .5rem;
+  border-block: 1px solid var(--c-borde);
+}
+.control-suave,
+.control-peligro {
+  display: inline-flex;
+  align-items: center;
+  gap: .4rem;
+  font-size: var(--fs-pequeno);
+  cursor: pointer;
+  user-select: none;
+}
+.control-suave { color: var(--c-perla); }
+.control-peligro { color: var(--c-perla); }
+
+/* El control que despublica se vuelve rojo cuando está marcado.
+   (Rojo no está en la paleta: se usa el acento verdoso para el aviso y el
+   candado, nunca un rojo nuevo. El peligro se comunica con palabras.) */
+.control-peligro input:checked + span {
+  color: var(--c-acento);
+  font-weight: 700;
+}
+.control-peligro input:disabled + span { opacity: .45; cursor: not-allowed; }
+
+.control-suave input:checked + span { color: var(--c-primario); }
+
+/* Objetivo táctil cómodo en móvil */
+.control-suave input,
+.control-peligro input {
+  width: 1.15rem;
+  height: 1.15rem;
+  accent-color: var(--c-primario);
+  flex: none;
+}
+
+/* ---- Cuerpo y campos ------------------------------------------------------ */
+.seccion__cuerpo { display: grid; gap: var(--sp-3); }
+
+.campo { display: grid; gap: .35rem; }
+.campo__cabecera {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--sp-2);
+  flex-wrap: wrap;
+}
+.campo__etiqueta {
+  font-size: var(--fs-pequeno);
+  font-weight: 700;
+  letter-spacing: .04em;
+  color: var(--c-texto);
+}
+.campo__candado {
+  font-size: var(--fs-micro);
+  letter-spacing: .14em;
+  text-transform: uppercase;
+  color: var(--c-perla);
+  border: 1px solid var(--c-borde-fuerte);
+  border-radius: var(--radio-s);
+  padding: .1rem .4rem;
+}
+.campo__ayuda {
+  font-size: var(--fs-micro);
+  color: var(--c-perla);
+  line-height: 1.45;
+  max-width: var(--ancho-lectura);
+}
+.campo__nota {
+  font-size: var(--fs-pequeno);
+  color: var(--c-perla);
+  border-left: 2px solid var(--c-borde-fuerte);
+  padding-inline-start: .7rem;
+  max-width: var(--ancho-lectura);
+}
+.campo__nota--fija { border-left-color: var(--c-primario); }
+
+/* Inputs y textareas del editor */
+.campo input[type="text"],
+.campo textarea {
+  width: 100%;
+  background: var(--c-fondo);
+  color: var(--c-texto);
+  border: 1px solid var(--c-borde-fuerte);
+  border-radius: var(--radio-s);
+  padding: .55rem .7rem;
+  font-family: var(--t-cuerpo);
+  font-size: var(--fs-cuerpo);
+  line-height: 1.5;
+  resize: vertical;
+}
+.campo input[type="text"]:focus,
+.campo textarea:focus {
+  outline: 2px solid var(--c-primario);
+  outline-offset: 1px;
+  border-color: var(--c-primario);
+}
+.campo input[readonly],
+.campo textarea[readonly] {
+  background: var(--c-superficie);
+  color: var(--c-perla);
+  cursor: not-allowed;
+}
+
+/* ---- Semáforo ------------------------------------------------------------- */
+.semaforo {
+  font-size: var(--fs-micro);
+  letter-spacing: .02em;
+  line-height: 1.4;
+  padding: .25rem .55rem;
+  border-radius: var(--radio-s);
+  border: 1px solid var(--c-borde);
+  background: var(--c-fondo);
+  color: var(--c-perla);
+  display: inline-block;
+}
+/* El color va SIEMPRE acompañado de la palabra del mensaje: el texto ya
+   dice «espacio de sobra», «al límite» o «se pasa». */
+.semaforo--verde {
+  border-color: rgba(162, 174, 21, .5);
+  color: var(--c-acento);
+}
+.semaforo--ambar {
+  border-color: rgba(242, 183, 5, .5);
+  color: var(--c-primario);
+}
+.semaforo--rojo {
+  border-color: var(--c-texto);
+  color: var(--c-texto);
+  background: rgba(242, 183, 5, .12);
+  font-weight: 700;
+}
+
+/* ---- Campo de imagen ------------------------------------------------------ */
+.imagen-campo {
+  display: grid;
+  gap: .45rem;
+  background: var(--c-fondo);
+  border: 1px dashed var(--c-borde-fuerte);
+  border-radius: var(--radio-s);
+  padding: var(--sp-2);
+}
+.imagen-campo__cabecera {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--sp-2);
+  flex-wrap: wrap;
+}
+.imagen-campo__cabecera strong {
+  font-size: var(--fs-pequeno);
+  color: var(--c-texto);
+}
+.imagen-campo__vista {
+  min-height: 6rem;
+  display: grid;
+  place-items: center;
+  background: var(--c-superficie);
+  border-radius: var(--radio-s);
+  overflow: hidden;
+}
+.imagen-campo__vista img {
+  max-width: 100%;
+  max-height: 12rem;
+  object-fit: contain;
+  display: block;
+}
+.imagen-campo__archivo {
+  position: absolute;
+  width: 1px; height: 1px;
+  opacity: 0;
+  pointer-events: none;
+}
+.imagen-campo__boton {
+  justify-self: start;
+  cursor: pointer;
+}
+
+/* ---- Tarjeta informativa final ------------------------------------------- */
+.seccion-editor--info {
+  background: transparent;
+  border-style: dashed;
+  border-color: var(--c-borde-fuerte);
+}
+.seccion-editor--info h3 {
+  font-family: var(--t-display);
+  font-size: .95rem;
+  letter-spacing: .06em;
+  text-transform: uppercase;
+  color: var(--c-perla);
+}
+.lista-puntos {
+  display: grid;
+  gap: .4rem;
+  padding-inline-start: 1.1rem;
+  color: var(--c-perla);
+  font-size: var(--fs-pequeno);
+  line-height: 1.5;
+  max-width: var(--ancho-lectura);
+}
+.lista-puntos li::marker { color: var(--c-primario); }
+
+/* ---- Móvil ---------------------------------------------------------------- */
+@media (max-width: 48em) {
+  .seccion-editor { padding: var(--sp-2); }
+  .seccion__cabecera { flex-direction: column; }
+  .seccion__acciones { width: 100%; }
+  .seccion__acciones .btn { flex: 1; }
+  .seccion__controles { gap: var(--sp-2); }
+  .control-suave,
+  .control-peligro { font-size: var(--fs-micro); }
+}
+
+/* ---- Sin animación para quien la haya desactivado (K2) ------------------- */
+@media (prefers-reduced-motion: reduce) {
+  .seccion-editor { transition: none; }
+}

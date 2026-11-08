@@ -1,0 +1,918 @@
+/* ==========================================================================
+   NITROTOON · componentes.css — el sistema de la vitrina
+   --------------------------------------------------------------------------
+   Componentes compartidos por TODAS las páginas (núcleo + espacios).
+   Reglas del sistema que este archivo materializa (§7.2):
+   · 2 — una sola acción dorada sólida por pantalla (el CTA de entradas de la
+     cinta); todo lo demás son botones de contorno.
+   · 3 — menú gigante por público, cierre con Esc y foco atrapado.
+   · 8 — hub de puertas: 7 paneles con acento propio de la paleta oficial.
+   · 12 — nada aquí apaga el foco; nada rompe el contraste AA.
+   ========================================================================== */
+
+/* ==========================================================================
+   1 · CINTA SUPERIOR — entradas + info del evento vigente (§2, §5.1)
+   Cinta y cabecera comparten un contenedor .tope sticky (una sola pieza).
+   ========================================================================== */
+.tope {
+  position: sticky;
+  top: 0;
+  z-index: var(--z-cinta);
+}
+.cinta {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--sp-3);
+  flex-wrap: wrap;
+  padding: .45rem var(--sp-3);
+  background: var(--c-negro-a80);
+  border-block-end: 2px solid var(--c-primario);
+  backdrop-filter: blur(8px);
+  font-size: var(--fs-pequeno);
+}
+.cinta__info {
+  display: flex;
+  align-items: baseline;
+  gap: .6rem;
+  min-width: 0;
+}
+.cinta__evento {
+  font-family: var(--t-display);
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: .08em;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 46vw;
+}
+.cinta__fecha { color: var(--c-acento); white-space: nowrap; }
+.cinta__cuenta {
+  color: var(--c-perla);
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+/* El CTA de la cinta: la única acción dorada sólida de cada pantalla (§7.2.2) */
+.btn--primario { /* definido más abajo junto a los botones */ }
+
+/* ==========================================================================
+   1b · CINTA INFINITA DE CONTENIDO — marquesina de datos del evento vigente
+   (MEJORA 04/11, pedido del usuario: «tipo reel, cinta infinita»)
+
+   · CSS puro: cero JavaScript, cero peso, cero bloqueo de lectura.
+   · Técnica: el texto se duplica una vez y el contenedor se traslada
+     exactamente -50 % en bucle → la costura nunca se ve.
+   · Accesibilidad: es decorativa (aria-hidden) porque repite datos que ya
+     están en el hero. Con prefers-reduced-motion se detiene y se puede leer
+     como cinta estática (regla K2 ya vigente en base.css).
+   · Pausa al pasar el cursor: quien quiera leer un ítem, lo detiene.
+   ========================================================================== */
+.franja {
+  position: relative;
+  overflow: hidden;
+  border-block: 1px solid var(--c-borde);
+  background: var(--c-superficie);
+  padding-block: .55rem;
+  /* Difuminado en los bordes: la costura desaparece en vez de cortarse seca */
+  -webkit-mask-image: linear-gradient(90deg, transparent, #000 4%, #000 96%, transparent);
+          mask-image: linear-gradient(90deg, transparent, #000 4%, #000 96%, transparent);
+}
+.franja__pista {
+  display: flex;
+  width: max-content;
+  animation: franja-desfilar 34s linear infinite;
+}
+.franja:hover .franja__pista,
+.franja:focus-within .franja__pista { animation-play-state: paused; }
+.franja__grupo {
+  display: flex;
+  align-items: center;
+  gap: 0;
+  flex: none;
+}
+.franja__item {
+  display: inline-flex;
+  align-items: center;
+  gap: .9rem;
+  padding-inline: 1.1rem;
+  font-family: var(--t-display);
+  font-size: var(--fs-micro);
+  letter-spacing: .22em;
+  text-transform: uppercase;
+  color: var(--c-texto);
+  white-space: nowrap;
+}
+/* El separador: un diamante dorado entre ítems (paleta cerrada) */
+.franja__item::after {
+  content: "";
+  width: 5px; height: 5px;
+  background: var(--c-primario);
+  transform: rotate(45deg);
+  flex: none;
+}
+.franja__item--acento { color: var(--c-primario); }
+.franja__item--verde  { color: var(--c-acento); }
+.franja__item--perla  { color: var(--c-perla); }
+
+@keyframes franja-desfilar {
+  from { transform: translateX(0); }
+  to   { transform: translateX(-50%); }
+}
+
+/* Movimiento reducido: se detiene y queda legible desde el principio */
+@media (prefers-reduced-motion: reduce) {
+  .franja__pista { animation: none; transform: none; }
+  .franja__grupo[aria-hidden="true"] { display: none; }
+}
+
+/* ==========================================================================
+   2 · CABECERA DE MARCA — nave + NITROTOON + disparador del menú gigante
+   ========================================================================== */
+.cabecera {
+  position: relative;
+  background: linear-gradient(var(--negro-a80), var(--c-fondo) 96%);
+  border-block-end: 1px solid var(--c-borde);
+}
+.cabecera__fila {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--sp-3);
+  padding-block: var(--sp-2);
+}
+.marca {
+  display: inline-flex;
+  align-items: center;
+  gap: .65rem;
+  text-decoration: none;
+  color: var(--c-texto);
+}
+.marca__nave { width: 44px; height: 44px; flex: none; }
+/* MTTO-1b v2 (mancheta del usuario): logo Logo Yellow recortado de su aire
+   transparente (5367x3017 -> franja 157x88), se muestra a 78x44 (retina 2x).
+   El logo ES la marca: lleva alt="Nitrotoon"; el lema va solo al lado. */
+.marca__logo { width: 78px; height: 44px; flex: none; }
+.marca__lema {
+  display: block;
+  font-family: var(--t-cuerpo);
+  font-size: var(--fs-micro);
+  line-height: 1;
+  letter-spacing: .3em;
+  text-transform: uppercase;
+  color: var(--c-perla);
+  margin-block-start: .2rem;
+}
+
+/* Navegación directa de escritorio (el resto vive en el menú gigante) */
+.nav-directa { display: none; }
+.nav-directa ul {
+  display: flex;
+  gap: var(--sp-4);
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+.nav-directa a {
+  color: var(--c-texto);
+  text-decoration: none;
+  font-family: var(--t-display);
+  font-size: .95rem;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  padding-block: .4rem;
+  border-block-end: 2px solid transparent;
+  transition: border-color var(--d-rapida) var(--e-nitro), color var(--d-rapida);
+}
+.nav-directa a:hover { color: var(--c-primario); }
+.nav-directa a[aria-current="page"] {
+  color: var(--c-primario);
+  border-block-end-color: var(--c-primario);
+}
+
+/* Botón que abre el menú gigante (móvil y escritorio, §7.2.3) */
+.btn-menu {
+  display: inline-flex;
+  align-items: center;
+  gap: .55rem;
+  border: 1px solid var(--c-borde-fuerte);
+  border-radius: var(--radio-s);
+  padding: .55rem .95rem;
+  color: var(--c-texto);
+  font-family: var(--t-display);
+  font-size: .92rem;
+  letter-spacing: .14em;
+  text-transform: uppercase;
+  background: var(--negro-a35);
+  transition: border-color var(--d-rapida), background var(--d-rapida);
+}
+.btn-menu:hover { border-color: var(--c-primario); background: var(--c-superficie); }
+.btn-menu__rayas {
+  width: 20px; height: 14px; flex: none;
+  display: inline-flex; flex-direction: column; justify-content: space-between;
+}
+.btn-menu__rayas span {
+  height: 2px; background: currentColor; border-radius: 1px;
+}
+
+@media (min-width: 56em) {
+  .nav-directa { display: block; }
+}
+
+/* ==========================================================================
+   3 · MENÚ GIGANTE — pantalla completa, agrupado por público (§7.2.3)
+   ========================================================================== */
+.mega {
+  position: fixed;
+  inset: 0;
+  z-index: var(--z-menu);
+  background:
+    radial-gradient(60rem 40rem at 110% -10%, var(--dorado-a07), transparent 60%),
+    radial-gradient(50rem 34rem at -20% 110%, var(--verde-a07), transparent 60%),
+    var(--c-fondo);
+  display: none;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+}
+.mega[data-abierto="true"] { display: block; }
+.mega__interior {
+  min-height: 100%;
+  padding-block: var(--sp-5) var(--sp-7);
+  display: grid;
+  gap: var(--sp-6);
+  align-content: start;
+}
+.mega__barra {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--sp-3);
+}
+.mega__titulo {
+  font-size: var(--fs-sub);
+  color: var(--c-perla);
+  letter-spacing: .2em;
+}
+.mega__grupos {
+  display: grid;
+  gap: var(--sp-6);
+}
+@media (min-width: 62em) {
+  .mega__grupos { grid-template-columns: 1.1fr 1fr; }
+}
+.mega__grupo > h2 {
+  font-size: var(--fs-micro);
+  font-family: var(--t-display);
+  letter-spacing: .3em;
+  color: var(--c-acento);
+  margin-block-end: var(--sp-3);
+}
+.mega__lista { list-style: none; margin: 0; padding: 0; display: grid; gap: .15rem; }
+.mega__lista a {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--sp-3);
+  padding: .55rem .35rem;
+  color: var(--c-texto);
+  text-decoration: none;
+  font-family: var(--t-display);
+  font-size: var(--fs-mega-menu);
+  letter-spacing: .04em;
+  text-transform: uppercase;
+  border-block-end: 1px solid var(--c-borde);
+  transition: color var(--d-rapida), padding-inline-start var(--d-rapida) var(--e-nitro);
+}
+.mega__lista a:hover { color: var(--c-primario); padding-inline-start: .8rem; }
+.mega__lista a[aria-current="page"] { color: var(--c-primario); }
+.mega__lista .nota { color: var(--c-perla); font-size: var(--fs-pequeno); text-transform: none; letter-spacing: 0; }
+.mega__puertas { display: grid; grid-template-columns: repeat(auto-fill, minmax(9.5rem, 1fr)); gap: var(--sp-3); }
+.mega__puerta {
+  display: grid;
+  gap: .45rem;
+  padding: var(--sp-3);
+  border: 1px solid var(--c-borde);
+  border-radius: var(--radio-m);
+  background: var(--c-superficie);
+  color: var(--c-texto);
+  text-decoration: none;
+  min-height: 6.2rem;
+  align-content: space-between;
+  transition: transform var(--d-rapida) var(--e-nitro), border-color var(--d-rapida);
+}
+.mega__puerta:hover { transform: translateY(-3px); border-color: var(--espacio-acento); }
+.mega__puerta strong { font-family: var(--t-display); text-transform: uppercase; letter-spacing: .08em; }
+.mega__puerta small { color: var(--c-perla); }
+.mega__puerta .icono-puerta { width: 30px; height: 30px; color: var(--espacio-acento); }
+
+/* ==========================================================================
+   4 · BOTONES — una acción dominante; el resto, contorno (§7.2.2)
+   ========================================================================== */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: .55rem;
+  font-family: var(--t-display);
+  font-weight: 700;
+  font-size: .95rem;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  text-decoration: none;
+  border-radius: var(--radio-s);
+  padding: .78rem 1.45rem;
+  transition: transform var(--d-rapida) var(--e-nitro),
+              background var(--d-rapida),
+              border-color var(--d-rapida),
+              color var(--d-rapida),
+              box-shadow var(--d-rapida);
+}
+.btn:active { transform: translateY(1px); }
+.btn--primario {
+  background: var(--c-primario);
+  color: var(--c-negro-puro);
+  border: 2px solid var(--c-primario);
+  box-shadow: 0 4px 22px var(--dorado-a28);
+}
+.btn--primario:hover {
+  background: var(--c-primario-hover);
+  border-color: var(--c-primario-hover);
+  color: var(--c-negro-puro);
+  box-shadow: 0 6px 26px var(--dorado-a28);
+}
+.btn--contorno {
+  border: 2px solid var(--c-borde-fuerte);
+  color: var(--c-texto);
+  background: transparent;
+}
+.btn--contorno:hover { border-color: var(--c-primario); color: var(--c-primario); }
+.btn--espacio {
+  border: 2px solid var(--espacio-acento);
+  color: var(--espacio-acento);
+  background: transparent;
+}
+.btn--espacio:hover { background: var(--espacio-acento-soft); }
+.btn--grande { font-size: 1.1rem; padding: .95rem 1.9rem; }
+.btn--pequeno { font-size: .8rem; padding: .5rem .9rem; }
+
+/* Enlace-flecha (acción secundaria discreta) */
+.enlace-flecha {
+  display: inline-flex;
+  align-items: center;
+  gap: .4rem;
+  font-family: var(--t-display);
+  font-size: .92rem;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  color: var(--c-primario);
+  text-decoration: none;
+}
+.enlace-flecha::after { content: "→"; transition: transform var(--d-rapida) var(--e-nitro); }
+.enlace-flecha:hover::after { transform: translateX(.35rem); }
+
+/* ==========================================================================
+   5 · HERO — el evento vigente viste la vitrina (§2, §9)
+   ========================================================================== */
+.hero {
+  position: relative;
+  overflow: clip;
+  padding-block: var(--sp-7) var(--sp-6);
+  border-block-end: 1px solid var(--c-borde);
+  background:
+    radial-gradient(70rem 42rem at 50% 118%, var(--espacio-acento-brillo), transparent 58%);
+}
+/* MEJORA (04/11, pedido del usuario): el bloque del evento se veía pegado a
+   la izquierda porque el título iba limitado a `max-width: 12ch` — dejaba un
+   hueco muerto enorme a la derecha. Ahora el hero es un CARTEL CENTRADO:
+   kicker, título, meta, acciones y nota centrados en el contenedor. Los
+   párrafos largos se quedan en su columna de lectura centrada (un párrafo
+   corto justificado crea huecos entre palabras) — se lee, no se estira. */
+.hero__interior { position: relative; display: grid; gap: var(--sp-4); justify-items: center; text-align: center; }
+.hero__kicker {
+  display: inline-flex;
+  align-items: center;
+  gap: .6rem;
+  color: var(--c-acento);
+  font-family: var(--t-display);
+  letter-spacing: .3em;
+  text-transform: uppercase;
+  font-size: var(--fs-micro);
+}
+.hero__kicker::before {
+  content: "";
+  width: 2.4rem; height: 2px;
+  background: var(--c-acento);
+}
+.hero__titulo {
+  font-size: var(--fs-hero);
+  line-height: .96;
+  max-width: 20ch;
+  text-wrap: balance;
+}
+.hero__titulo .linea-acento {
+  display: block;
+  color: var(--espacio-acento);
+  font-size: .34em;
+  letter-spacing: .1em;
+  margin-block-start: .22em;
+  max-width: none;
+}
+.hero__meta {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: .5rem 1.4rem;
+  color: var(--c-perla);
+  font-size: var(--fs-sub);
+}
+.hero__meta strong { color: var(--c-texto); }
+.hero__acciones { display: flex; flex-wrap: wrap; gap: var(--sp-3); align-items: center; justify-content: center; }
+/* La nota (y la bajada del evento, que se renderiza con esta misma clase)
+   se queda en columna de lectura, centrada en la página: las líneas
+   alineadas a la izquierda dentro del bloque — se lee, no se estira. */
+.hero__nota {
+  color: var(--c-perla);
+  font-size: var(--fs-pequeno);
+  max-width: var(--ancho-lectura);
+  margin-inline: auto;
+  text-align: start;
+}
+
+/* Póster/video del HERO: el slot assets/hero-loop.mp4 se activa solo si
+   existe (§9); sin él, la animación CSS del fondo sostiene la escena. */
+.hero__medio {
+  position: relative;
+  border-radius: var(--radio-l);
+  overflow: hidden;
+  border: 1px solid var(--c-borde);
+  box-shadow: var(--sombra-2);
+  background: var(--c-superficie);
+}
+.hero__medio video { width: 100%; aspect-ratio: 16 / 9; object-fit: cover; }
+.hero__medio .btn-reproducir {
+  position: absolute;
+  inset: auto auto var(--sp-3) var(--sp-3);
+}
+
+/* ==========================================================================
+   6 · HUB DE PUERTAS — 7 paneles, cada uno con su acento (§5, §7.2.8)
+   ========================================================================== */
+.puertas {
+  display: grid;
+  gap: var(--sp-3);
+  grid-template-columns: 1fr;
+}
+@media (min-width: 34em) { .puertas { grid-template-columns: repeat(2, 1fr); } }
+@media (min-width: 68em) { .puertas { grid-template-columns: repeat(4, 1fr); } }
+
+.puerta {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  gap: .5rem;
+  min-height: 15rem;
+  padding: var(--sp-4);
+  border: 1px solid var(--c-borde);
+  border-radius: var(--radio-m);
+  background-color: var(--c-superficie);
+  background-size: 16px 16px;
+  color: var(--c-texto);
+  text-decoration: none;
+  overflow: hidden;
+  isolation: isolate;
+  transition: transform var(--d-normal) var(--e-nitro),
+              border-color var(--d-normal),
+              box-shadow var(--d-normal);
+}
+.puerta::before {
+  /* Lámina de acento del espacio: el color de la puerta (§5) */
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(160deg, var(--espacio-acento-brillo), transparent 55%);
+  opacity: .5;
+  z-index: -1;
+  transition: opacity var(--d-normal);
+}
+.puerta::after {
+  /* Barra de identidad inferior */
+  content: "";
+  position: absolute;
+  inset: auto 0 0 0;
+  height: 4px;
+  background: var(--espacio-acento);
+}
+.puerta:hover, .puerta:focus-visible {
+  transform: translateY(-5px);
+  border-color: var(--espacio-acento);
+  box-shadow: var(--sombra-acento);
+}
+.puerta:hover::before { opacity: .85; }
+.puerta__icono {
+  width: 42px; height: 42px;
+  color: var(--espacio-acento);
+  margin-block-end: auto;
+}
+.puerta__nombre {
+  font-family: var(--t-display);
+  font-size: 1.45rem;
+  letter-spacing: .06em;
+  text-transform: uppercase;
+  line-height: 1;
+}
+.puerta__resumen { color: var(--c-perla); font-size: var(--fs-pequeno); line-height: 1.45; }
+.puerta__abrir {
+  font-family: var(--t-display);
+  font-size: var(--fs-micro);
+  letter-spacing: .24em;
+  text-transform: uppercase;
+  color: var(--espacio-acento);
+}
+
+/* Texturas propias de cada puerta — solo mezclas de la paleta oficial */
+.puerta[data-puerta="eventos"]  { background-image: repeating-linear-gradient(-45deg, var(--dorado-a14) 0 2px, transparent 2px 12px); }
+.puerta[data-puerta="otaku"]    { background-image: radial-gradient(var(--verde-a14) 1.4px, transparent 1.5px); }
+.puerta[data-puerta="gamers"]   { background-image: linear-gradient(var(--blanco-a07) 1px, transparent 1px), linear-gradient(90deg, var(--blanco-a07) 1px, transparent 1px); background-size: 16px 16px, 16px 16px; }
+.puerta[data-puerta="kpop"]     { background-image: radial-gradient(circle at 50% 120%, var(--dorado-a28), transparent 46%), repeating-linear-gradient(90deg, var(--blanco-a07) 0 1px, transparent 1px 22px); }
+.puerta[data-puerta="cosplay"]  { background-image: radial-gradient(var(--perla-a28) 1px, transparent 1.4px); background-size: 22px 22px; }
+.puerta[data-puerta="artistas"] { background-image: repeating-linear-gradient(45deg, var(--verde-a14) 0 1px, transparent 1px 9px), repeating-linear-gradient(-45deg, var(--verde-a14) 0 1px, transparent 1px 9px); }
+.puerta[data-puerta="mercado"]  { background-image: linear-gradient(var(--blanco-a14) 1px, transparent 1px), linear-gradient(90deg, var(--blanco-a14) 1px, transparent 1px); background-size: 8px 8px, 8px 8px; }
+
+/* ==========================================================================
+   7 · CABECERAS DE SECCIÓN Y PÁGINA
+   ========================================================================== */
+.intro { padding-block: var(--sp-6) var(--sp-5); border-block-end: 1px solid var(--c-borde); }
+.intro h1 { max-width: 16ch; }
+.intro .entradilla {
+  color: var(--c-perla);
+  font-size: var(--fs-sub);
+  max-width: 44rem;
+  margin-block-start: var(--sp-3);
+}
+.intro .meta-pagina {
+  display: flex;
+  flex-wrap: wrap;
+  gap: .5rem 1.2rem;
+  margin-block-start: var(--sp-3);
+  color: var(--c-perla);
+  font-size: var(--fs-pequeno);
+}
+
+.cabecera-seccion {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: end;
+  justify-content: space-between;
+  gap: var(--sp-3);
+  margin-block-end: var(--sp-5);
+}
+.cabecera-seccion p { color: var(--c-perla); max-width: 38rem; }
+
+/* ==========================================================================
+   8 · TARJETAS DE CONTENIDO (eventos, avisos, espacios)
+   ========================================================================== */
+.tarjeta {
+  background: var(--c-superficie);
+  border: 1px solid var(--c-borde);
+  border-radius: var(--radio-m);
+  padding: var(--sp-4);
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-2);
+  transition: transform var(--d-normal) var(--e-nitro),
+              border-color var(--d-normal),
+              box-shadow var(--d-normal);
+}
+.tarjeta:hover { transform: translateY(-3px); border-color: var(--c-borde-fuerte); box-shadow: var(--sombra-1); }
+.tarjeta h3 { font-size: 1.3rem; }
+.tarjeta .tarjeta__pie {
+  margin-block-start: auto;
+  padding-block-start: var(--sp-2);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--sp-2);
+  flex-wrap: wrap;
+}
+
+/* Tarjeta de evento con bloque de fecha (§5.2) */
+.tarjeta-evento { display: grid; grid-template-columns: auto 1fr; gap: var(--sp-3) var(--sp-4); }
+.tarjeta-evento__fecha {
+  display: grid;
+  justify-items: center;
+  align-content: start;
+  gap: .1rem;
+  border: 1px solid var(--c-borde-fuerte);
+  border-radius: var(--radio-s);
+  padding: .6rem .85rem;
+  background: var(--c-fondo);
+  min-width: 4.6rem;
+}
+.tarjeta-evento__fecha .dia {
+  font-family: var(--t-display);
+  font-size: 2rem;
+  font-weight: 700;
+  line-height: 1;
+  color: var(--c-primario);
+  font-variant-numeric: tabular-nums;
+}
+.tarjeta-evento__fecha .mes,
+.tarjeta-evento__fecha .ano {
+  font-family: var(--t-display);
+  font-size: var(--fs-micro);
+  letter-spacing: .18em;
+  text-transform: uppercase;
+  color: var(--c-perla);
+}
+.tarjeta-evento__cuerpo { display: grid; gap: .45rem; align-content: start; }
+.tarjeta-evento__lugar { color: var(--c-perla); font-size: var(--fs-pequeno); }
+.tarjeta-evento__descripcion { color: var(--c-perla); font-size: var(--fs-pequeno); }
+
+/* Estados reales del calendario — nunca un "próximamente" vacío (K3, §7.2.11) */
+.estado {
+  display: inline-flex;
+  align-items: center;
+  gap: .45rem;
+  font-family: var(--t-display);
+  font-size: var(--fs-micro);
+  letter-spacing: .16em;
+  text-transform: uppercase;
+  padding: .3rem .7rem;
+  border-radius: 999px;
+  border: 1px solid var(--c-borde-fuerte);
+  color: var(--c-perla);
+  width: fit-content;
+}
+.estado::before {
+  content: "";
+  width: .5rem; height: .5rem;
+  border-radius: 50%;
+  background: currentColor;
+}
+.estado--a-la-venta   { color: var(--c-acento);   border-color: var(--verde-a35);  background: var(--verde-a14); }
+.estado--en-preparacion { color: var(--c-texto);  border-color: var(--c-borde-fuerte); background: var(--blanco-a07); }
+.estado--en-negociacion { color: var(--c-primario); border-color: var(--dorado-a28); background: var(--dorado-a14); }
+.estado--realizado    { color: var(--c-perla);    border-color: var(--c-borde-fuerte); background: transparent; }
+/* Estados del ROADMAP (Fase 4, §11): crecimiento, no calendario */
+.estado--documentado  { color: var(--c-acento);   border-color: var(--c-acento);       background: transparent; }
+.estado--en-estudio   { color: var(--c-perla);    border-color: var(--c-borde-fuerte); background: transparent; }
+
+/* ==========================================================================
+   9 · AVISO / NOTICIA — pieza componible de la vitrina (§6)
+   ========================================================================== */
+.aviso {
+  display: flex;
+  gap: var(--sp-3);
+  align-items: flex-start;
+  border: 1px solid var(--dorado-a28);
+  border-radius: var(--radio-m);
+  background: linear-gradient(90deg, var(--dorado-a14), transparent 70%);
+  padding: var(--sp-3) var(--sp-4);
+}
+.aviso--verde { border-color: var(--verde-a35); background: linear-gradient(90deg, var(--verde-a14), transparent 70%); }
+.aviso__icono { width: 26px; height: 26px; flex: none; color: var(--c-primario); margin-block-start: .15rem; }
+.aviso--verde .aviso__icono { color: var(--c-acento); }
+.aviso strong { display: block; font-family: var(--t-display); letter-spacing: .05em; text-transform: uppercase; }
+.aviso p { color: var(--c-perla); font-size: var(--fs-pequeno); }
+
+/* ==========================================================================
+   10 · CUENTA REGRESIVA (§6: pieza del rompecabezas)
+   ========================================================================== */
+.cuenta { display: flex; gap: var(--sp-2); flex-wrap: wrap; }
+.cuenta__celda {
+  min-width: 4.6rem;
+  text-align: center;
+  background: var(--c-superficie);
+  border: 1px solid var(--c-borde);
+  border-radius: var(--radio-s);
+  padding: .6rem .5rem .5rem;
+}
+.cuenta__valor {
+  display: block;
+  font-family: var(--t-tabular);
+  font-variant-numeric: tabular-nums;
+  font-size: 1.7rem;
+  font-weight: 700;
+  line-height: 1.1;
+  color: var(--c-primario);
+}
+.cuenta__etiqueta {
+  display: block;
+  font-size: var(--fs-micro);
+  letter-spacing: .2em;
+  text-transform: uppercase;
+  color: var(--c-perla);
+}
+
+/* ==========================================================================
+   11 · PIE DE PÁGINA — intranet por evento + acceso discreto (§5.9)
+   ========================================================================== */
+.pie {
+  margin-block-start: var(--sp-7);
+  border-block-start: 1px solid var(--c-borde);
+  background: linear-gradient(var(--negro-a60), transparent 40%);
+  padding-block: var(--sp-6) var(--sp-4);
+}
+.pie__columnas {
+  display: grid;
+  gap: var(--sp-5);
+  grid-template-columns: 1fr;
+}
+@media (min-width: 46em) { .pie__columnas { grid-template-columns: 1.3fr 1fr 1fr; } }
+.pie h2 {
+  font-size: var(--fs-micro);
+  letter-spacing: .3em;
+  color: var(--c-acento);
+  margin-block-end: var(--sp-2);
+}
+.pie__lista { list-style: none; margin: 0; padding: 0; display: grid; gap: .45rem; }
+.pie__lista a { color: var(--c-perla); text-decoration: none; }
+.pie__lista a:hover { color: var(--c-primario); }
+.pie__marca p { color: var(--c-perla); font-size: var(--fs-pequeno); max-width: 26rem; margin-block: var(--sp-2); }
+.pie__redes { display: flex; gap: var(--sp-2); }
+.pie__redes a {
+  display: inline-flex;
+  width: 2.75rem; height: 2.75rem;   /* objetivo táctil ≥44 px */
+  align-items: center;
+  justify-content: center;
+  border: 1px solid var(--c-borde-fuerte);
+  border-radius: 50%;
+  color: var(--c-perla);
+  transition: color var(--d-rapida), border-color var(--d-rapida), transform var(--d-rapida) var(--e-nitro);
+}
+.pie__redes a:hover { color: var(--c-primario); border-color: var(--c-primario); transform: translateY(-2px); }
+.pie__legal {
+  margin-block-start: var(--sp-5);
+  padding-block-start: var(--sp-3);
+  border-block-start: 1px solid var(--c-borde);
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: var(--sp-2);
+  color: var(--c-perla);
+  font-size: var(--fs-micro);
+}
+.acceso-admin { color: var(--perla-a70); }
+.acceso-admin:hover { color: var(--c-perla); }
+
+/* ==========================================================================
+   12 · NAVE INSIGNIA — vuela entre secciones con estela dorada (§7, §3.7)
+   ========================================================================== */
+.insignia {
+  position: fixed;
+  z-index: var(--z-insignia);
+  width: 86px;
+  height: 86px;
+  pointer-events: none;
+  color: var(--c-primario);
+  opacity: 0;
+  transition: opacity var(--d-normal);
+  will-change: transform;
+  filter: drop-shadow(0 0 8px var(--dorado-a55));
+}
+.insignia[data-vuela="true"] { opacity: 1; }
+.insignia svg { width: 100%; height: 100%; }
+.estela {
+  position: fixed;
+  z-index: calc(var(--z-insignia) - 1);
+  height: 3px;
+  pointer-events: none;
+  background: linear-gradient(90deg, transparent, var(--dorado-a55), var(--c-primario));
+  border-radius: 999px;
+  transform-origin: left center;
+  opacity: 0;
+}
+.estela[data-activa="true"] { opacity: 1; }
+
+/* Flotación de espera en su esquina (apagada con reduced-motion en base.css) */
+.insignia[data-en-espera="true"] { animation: flotar 5.2s ease-in-out infinite; }
+@keyframes flotar {
+  0%, 100% { transform: translateY(0) rotate(0deg); }
+  50%      { transform: translateY(-9px) rotate(-2deg); }
+}
+
+/* ==========================================================================
+   13 · ESTRELLAS — fondo vivo del HERO (decorativo, aria-hidden)
+   ========================================================================== */
+.estrellas {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background-image:
+    radial-gradient(1.5px 1.5px at 12% 22%, var(--blanco-a70), transparent 55%),
+    radial-gradient(1px 1px at 34% 68%, var(--perla-a70), transparent 55%),
+    radial-gradient(1.8px 1.8px at 58% 14%, var(--dorado-a55), transparent 55%),
+    radial-gradient(1px 1px at 71% 44%, var(--blanco-a70), transparent 55%),
+    radial-gradient(1.4px 1.4px at 86% 76%, var(--perla-a28), transparent 55%),
+    radial-gradient(1px 1px at 44% 88%, var(--blanco-a14), transparent 55%),
+    radial-gradient(1.6px 1.6px at 92% 12%, var(--dorado-a28), transparent 55%),
+    radial-gradient(1px 1px at 5% 62%, var(--blanco-a70), transparent 55%);
+  background-size: 340px 340px, 280px 280px, 420px 420px, 260px 260px,
+                   380px 380px, 300px 300px, 440px 440px, 240px 240px;
+  animation: deriva 90s linear infinite;
+  opacity: .8;
+}
+@keyframes deriva {
+  from { background-position: 0 0, 0 0, 0 0, 0 0, 0 0, 0 0, 0 0, 0 0; }
+  to   { background-position: 340px 190px, -280px 240px, 420px 120px, -260px 300px,
+                              380px 90px, -300px 210px, 440px 160px, -240px 330px; }
+}
+
+/* Pieza libre: reel destacado del dashboard (§6) */
+.pieza-reel {
+  position: relative;
+  max-width: 52rem;
+  margin-inline: auto;
+  aspect-ratio: 16 / 9;
+  border: 1px solid var(--c-borde);
+  border-radius: var(--radio-m);
+  overflow: hidden;
+  background: var(--c-superficie);
+}
+
+/* Pieza libre: carrusel manual (sin autoplay, K1) */
+.carrusel-manual { max-width: 44rem; display: grid; gap: var(--sp-3); }
+.carrusel-manual__ventana { min-height: 9rem; }
+
+/* ==========================================================================
+   14 · ICONOS INYECTADOS ([data-icono]) Y AJUSTES FINOS
+   ========================================================================== */
+[data-icono] { display: inline-flex; }
+[data-icono] > svg { width: 100%; height: 100%; }
+.via > span:first-child { width: 26px; height: 26px; flex: none; }
+.pie__redes [data-icono] { width: 20px; height: 20px; }
+
+@media (max-width: 30em) {
+  .cinta__cuenta { display: none; }
+  .marca__lema { display: none; }
+}
+
+/* ==========================================================================
+   MÓVIL · ajustes finos (MEJORA 04/11, reporte del usuario: «en teléfono
+   está desprolijo, el hero es demasiado grande»)
+
+   El sitio es mobile-first en estructura, pero le faltaban los ajustes de
+   escala: en un teléfono de 390px el título del hero medía 43px y el bloque
+   completo ocupaba más de una pantalla entera. Aquí se corrige SOLO la
+   escala y el aire — nada de la identidad (paleta y tipografías cerradas).
+   ========================================================================== */
+@media (max-width: 48em) {
+  /* 1 · El hero respira menos y su título cabe de un vistazo */
+  .hero {
+    padding-block: var(--sp-5) var(--sp-4);
+  }
+  .hero__interior { gap: var(--sp-3); }
+  .hero__titulo {
+    font-size: clamp(1.85rem, 8.5vw, 2.6rem);
+    line-height: 1;
+    max-width: 100%;
+  }
+  /* El «linea-acento» (la fecha bajo el nombre) no debe competir con el título */
+  .hero__titulo .linea-acento { font-size: .42em; letter-spacing: .06em; }
+  .hero__kicker { letter-spacing: .18em; }
+  /* La bajada: más compacta y con mejor interlineado en pantalla pequeña */
+  .hero__nota { font-size: var(--fs-pequeno); line-height: 1.5; }
+  .hero__meta { font-size: 1rem; gap: .3rem .9rem; }
+  .hero__acciones { gap: var(--sp-2); }
+
+  /* 2 · Cuenta regresiva: 4 celdas legibles sin apretar ni salirse */
+  .cuenta { gap: .4rem; justify-content: center; }
+  .cuenta__celda {
+    min-width: 4rem;
+    padding: .45rem .4rem .4rem;
+  }
+  .cuenta__valor { font-size: 1.35rem; }
+  .cuenta__etiqueta { font-size: .62rem; letter-spacing: .14em; }
+
+  /* 3 · Cinta infinita: más lenta y con ítems legibles (no marean) */
+  .franja { padding-block: .45rem; }
+  .franja__item {
+    font-size: .68rem;
+    letter-spacing: .16em;
+    padding-inline: .8rem;
+  }
+  .franja__pista { animation-duration: 46s; }
+
+  /* 4 · Las secciones no necesitan el aire de escritorio */
+  .seccion { padding-block: var(--sp-5); }
+  .seccion--compacta { padding-block: var(--sp-4); }
+}
+
+/* Teléfonos pequeños (iPhone SE y similares, 320-360px) */
+@media (max-width: 22.5em) {
+  .hero__titulo { font-size: 1.7rem; }
+  .cuenta__celda { min-width: 3.5rem; }
+  .cuenta__valor { font-size: 1.15rem; }
+  .franja__item { font-size: .62rem; padding-inline: .65rem; }
+}
+
+/* 5 · Los h1 de las páginas interiores (heredan --fs-display): en móvil
+   bajan un escalón para no romper palabras ni empujar el contenido. */
+@media (max-width: 48em) {
+  h1 { font-size: clamp(1.6rem, 7.2vw, 2.1rem); line-height: 1.05; }
+  h2 { font-size: clamp(1.25rem, 5.4vw, 1.6rem); }
+  body { overflow-wrap: break-word; }
+}

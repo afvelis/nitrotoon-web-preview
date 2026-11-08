@@ -1,0 +1,120 @@
+/* ==========================================================================
+   NITROTOON · tokens.css — ÚNICA fuente de verdad del sistema (§7.2.1)
+   --------------------------------------------------------------------------
+   Paleta OFICIAL aprobada 29/10/2026 (§7.1 del PROMPT-WEB-NITROTOON.md).
+   · El AZUL y toda su familia (azules, cianes, índigos) están VETADOS: es
+     el color de la competencia. El ÁRBITRO rechaza cualquier entrega azul.
+   · Prohibido introducir colores nuevos por fuera de este archivo sin
+     actualizar primero el prompt maestro.
+   · Las 3 comunidades grandes recibirán skins completos en la Fase 3
+     (aprobados uno a uno por el usuario); por ahora los espacios usan
+     acentos tomados EXCLUSIVAMENTE de esta paleta (§7.2.13).
+   ========================================================================== */
+
+:root {
+  /* ---- 1 · Paleta oficial (§7.1) --------------------------------------- */
+  --c-fondo:          #0A0A0A;  /* Negro profundo — fondo global            */
+  --c-superficie:     #161616;  /* Gris carbón — paneles y tarjetas         */
+  --c-texto:          #FFFFFF;  /* Blanco — texto principal                 */
+  --c-primario:       #F2B705;  /* Dorado nitro — ÚNICO CTA sólido          */
+  --c-primario-hover: #C8930A;  /* Hover del CTA                            */
+  --c-acento:         #A2AE15;  /* Verde ácido — datos, estados, cifras     */
+  --c-perla:          #B3B3B3;  /* Gris perla — texto suave                 */
+
+  /* ---- 2 · Derivados declarados (solo mezclas de los oficiales) -------- */
+  --c-superficie-2:   #1E1E1E;  /* carbón elevado (hover de panel)          */
+  --c-superficie-3:   #242424;  /* carbón máximo (elemento activo)          */
+  --c-borde:          #2C2C2C;
+  --c-borde-fuerte:   #3A3A3A;
+  --c-negro-puro:     #000000;  /* solo para sombras y texto sobre dorado   */
+
+  --dorado-a85: rgba(242, 183, 5, .85);
+  --dorado-a55: rgba(242, 183, 5, .55);
+  --dorado-a28: rgba(242, 183, 5, .28);
+  --dorado-a14: rgba(242, 183, 5, .14);
+  --dorado-a07: rgba(242, 183, 5, .07);
+  --verde-a70:  rgba(162, 174, 21, .70);
+  --verde-a35:  rgba(162, 174, 21, .35);
+  --verde-a14:  rgba(162, 174, 21, .14);
+  --verde-a07:  rgba(162, 174, 21, .07);
+  --blanco-a92: rgba(255, 255, 255, .92);
+  --blanco-a70: rgba(255, 255, 255, .70);
+  --blanco-a14: rgba(255, 255, 255, .14);
+  --blanco-a07: rgba(255, 255, 255, .07);
+  --perla-a70:  rgba(179, 179, 179, .70);
+  --perla-a28:  rgba(179, 179, 179, .28);
+  --perla-a14:  rgba(179, 179, 179, .14);
+  --negro-a80:  rgba(10, 10, 10, .80);
+  --negro-a60:  rgba(10, 10, 10, .60);
+  --negro-a35:  rgba(10, 10, 10, .35);
+
+  /* ---- 3 · Tema del espacio activo (§7.2.13) ----------------------------
+     Cada página de espacio fija data-espacio en <body>; aquí se mapean los
+     acentos de Fase 1 (modelo C — tema compartido) usando solo la paleta
+     oficial. Un skin de Fase 3 redefinirá SOLO estas variables + hero y
+     texturas; nunca la navegación, los componentes ni la accesibilidad.   */
+  --espacio-acento:      var(--c-primario);
+  --espacio-acento-soft: var(--dorado-a14);
+  --espacio-acento-brillo: var(--dorado-a28);
+}
+
+/* Temas de acento de Fase 1 (uno por puerta del hub; ver §5) */
+[data-espacio="nitrotoon"] { --espacio-acento: var(--c-primario); --espacio-acento-soft: var(--dorado-a14); --espacio-acento-brillo: var(--dorado-a28); }
+[data-espacio="eventos"]   { --espacio-acento: var(--c-primario); --espacio-acento-soft: var(--dorado-a14); --espacio-acento-brillo: var(--dorado-a28); }
+[data-espacio="otaku"]     { --espacio-acento: var(--c-acento);   --espacio-acento-soft: var(--verde-a14);   --espacio-acento-brillo: var(--verde-a35); }
+[data-espacio="gamers"]    { --espacio-acento: var(--c-texto);    --espacio-acento-soft: var(--blanco-a07);  --espacio-acento-brillo: var(--blanco-a14); }
+[data-espacio="kpop"]      { --espacio-acento: var(--c-primario); --espacio-acento-soft: var(--dorado-a14);  --espacio-acento-brillo: var(--dorado-a28); }
+[data-espacio="cosplay"]   { --espacio-acento: var(--c-perla);    --espacio-acento-soft: var(--perla-a14);   --espacio-acento-brillo: var(--perla-a28); }
+[data-espacio="artistas"]  { --espacio-acento: var(--c-acento);   --espacio-acento-soft: var(--verde-a14);   --espacio-acento-brillo: var(--verde-a35); }
+[data-espacio="mercado"]   { --espacio-acento: var(--c-texto);    --espacio-acento-soft: var(--blanco-a07);  --espacio-acento-brillo: var(--blanco-a14); }
+
+:root {
+  /* ---- 4 · Tipografía (fuentes locales del sistema — sin CDN) ----------
+     Slot para fuente display propia por espacio en Fase 3:
+     assets/fuentes/ (documentado en assets/LEEME-ASSETS.md).             */
+  --t-display: "Bahnschrift", "Avenir Next Condensed", "Franklin Gothic Medium",
+               "Arial Narrow", "Segoe UI", sans-serif;
+  --t-cuerpo:  system-ui, -apple-system, "Segoe UI", Roboto, Ubuntu,
+               Cantarell, Arial, sans-serif;
+  --t-tabular: "Bahnschrift", "Segoe UI", Roboto, Arial, sans-serif;
+
+  --fs-hero:   clamp(2.7rem, 9vw, 7.5rem);
+  --fs-display: clamp(2.05rem, 5.6vw, 4.3rem);
+  --fs-titulo: clamp(1.55rem, 3.6vw, 2.55rem);
+  --fs-sub:    clamp(1.1rem, 2vw, 1.3rem);
+  --fs-cuerpo: clamp(1rem, 1.35vw, 1.08rem);
+  --fs-pequeno: .86rem;
+  --fs-micro:  .74rem;
+  --fs-mega-menu: clamp(1.05rem, 1.6vw, 1.3rem);
+
+  /* ---- 5 · Ritmo, forma y profundidad ---------------------------------- */
+  --sp-1: .25rem;
+  --sp-2: .5rem;
+  --sp-3: 1rem;
+  --sp-4: 1.5rem;
+  --sp-5: 2.25rem;
+  --sp-6: 3.25rem;
+  --sp-7: 4.75rem;
+  --sp-8: 7rem;
+  --ancho-max: 72rem;
+  --ancho-lectura: 42rem;
+  --radio-s: .45rem;
+  --radio-m: .8rem;
+  --radio-l: 1.25rem;
+  --borde-fino: 1px solid var(--c-borde);
+  --sombra-1: 0 2px 10px rgba(0, 0, 0, .5);
+  --sombra-2: 0 12px 36px rgba(0, 0, 0, .55);
+  --sombra-acento: 0 0 0 1px var(--espacio-acento-brillo), 0 8px 28px var(--espacio-acento-soft);
+
+  /* ---- 6 · Movimiento (la nave insignia los respeta, §3.7) -------------- */
+  --d-rapida: 140ms;
+  --d-normal: 280ms;
+  --d-lenta: 640ms;
+  --e-nitro: cubic-bezier(.22, 1, .36, 1);
+
+  --z-cinta: 40;     /* cinta superior fija        */
+  --z-cabecera: 30;  /* cabecera + botón de menú   */
+  --z-menu: 50;      /* menú gigante               */
+  --z-insignia: 60;  /* nave que vuela             */
+  --z-skip: 100;     /* enlace "saltar contenido"  */
+}

@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 400" role="img" aria-label="Marca demo de Radio Geek 89.7">
+<circle cx="200" cy="200" r="150" fill="none" stroke="#3A3A3A" stroke-width="6"/>
+
+<circle cx="200" cy="220" r="26" fill="#A2AE15"/>
+<g fill="none" stroke="#A2AE15" stroke-width="12" stroke-linecap="round">
+<path d="M136 156 a90 90 0 0 1 128 0"/><path d="M104 122 a136 136 0 0 1 192 0" opacity=".55"/>
+</g>
+<path d="M200 246 v70" stroke="#A2AE15" stroke-width="12" stroke-linecap="round"/>
+</svg>

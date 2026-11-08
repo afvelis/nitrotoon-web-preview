@@ -1,0 +1,51 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 900" role="img" aria-label="Ilustración abstracta del evento">
+<defs>
+<linearGradient id="cielo" x1="0" y1="0" x2="0" y2="1">
+<stop offset="0" stop-color="#161616"/><stop offset="1" stop-color="#0A0A0A"/>
+</linearGradient>
+<radialGradient id="glow" cx=".5" cy=".55" r=".55">
+<stop offset="0" stop-color="#A2AE15" stop-opacity=".5"/><stop offset="1" stop-color="#A2AE15" stop-opacity="0"/>
+</radialGradient>
+</defs>
+<rect width="1600" height="900" fill="url(#cielo)"/>
+<ellipse cx="800" cy="500" rx="640" ry="330" fill="url(#glow)"/>
+<g fill="#FFFFFF" opacity=".5">
+<circle cx="140" cy="120" r="3"/><circle cx="420" cy="80" r="2"/><circle cx="760" cy="60" r="3"/>
+<circle cx="1120" cy="90" r="2"/><circle cx="1460" cy="140" r="3"/><circle cx="220" cy="260" r="2"/>
+<circle cx="1380" cy="300" r="2"/>
+</g>
+
+<g fill="none" stroke="#B3B3B3" stroke-width="9">
+<circle cx="620" cy="380" r="52"/><path d="M540 700 c0 -120 40 -170 80 -170 c40 0 80 50 80 170"/>
+<circle cx="860" cy="380" r="52"/><path d="M780 700 c0 -120 40 -170 80 -170 c40 0 80 50 80 170"/>
+</g>
+<g fill="none" stroke="#F2B705" stroke-width="9">
+<circle cx="742" cy="500" r="38"/><path d="M690 700 c0 -90 26 -120 52 -120 c26 0 52 30 52 120"/>
+</g>
+<path d="M340 220 a90 90 0 0 1 180 0 M1080 220 a90 90 0 0 1 180 0" fill="none" stroke="#A2AE15" stroke-width="8" opacity=".6"/>
+<rect x="40" y="590" width="70" height="410" rx="35" fill="#1E1E1E"/>
+<circle cx="75" cy="560" r="29" fill="#1E1E1E"/>
+<rect x="150" y="590" width="110" height="410" rx="55" fill="#1E1E1E"/>
+<circle cx="205" cy="560" r="49" fill="#1E1E1E"/>
+<rect x="284" y="670" width="90" height="330" rx="45" fill="#1E1E1E"/>
+<circle cx="329" cy="640" r="39" fill="#1E1E1E"/>
+<rect x="414" y="670" width="90" height="330" rx="45" fill="#1E1E1E"/>
+<circle cx="459" cy="640" r="39" fill="#1E1E1E"/>
+<rect x="564" y="670" width="70" height="330" rx="35" fill="#1E1E1E"/>
+<circle cx="599" cy="640" r="29" fill="#1E1E1E"/>
+<rect x="694" y="590" width="110" height="410" rx="55" fill="#1E1E1E"/>
+<circle cx="749" cy="560" r="49" fill="#1E1E1E"/>
+<rect x="864" y="670" width="70" height="330" rx="35" fill="#1E1E1E"/>
+<circle cx="899" cy="640" r="29" fill="#1E1E1E"/>
+<rect x="958" y="590" width="70" height="410" rx="35" fill="#1E1E1E"/>
+<circle cx="993" cy="560" r="29" fill="#1E1E1E"/>
+<rect x="1068" y="590" width="90" height="410" rx="45" fill="#1E1E1E"/>
+<circle cx="1113" cy="560" r="39" fill="#1E1E1E"/>
+<rect x="1218" y="670" width="110" height="330" rx="55" fill="#1E1E1E"/>
+<circle cx="1273" cy="640" r="49" fill="#1E1E1E"/>
+<rect x="1368" y="630" width="70" height="370" rx="35" fill="#1E1E1E"/>
+<circle cx="1403" cy="600" r="29" fill="#1E1E1E"/>
+<rect x="1478" y="590" width="70" height="410" rx="35" fill="#1E1E1E"/>
+<circle cx="1513" cy="560" r="29" fill="#1E1E1E"/>
+<path d="M0 830 H1600 V900 H0 Z" fill="#A2AE15" opacity=".85"/>
+</svg>

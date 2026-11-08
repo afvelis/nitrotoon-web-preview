@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 400" role="img" aria-label="Marca demo de Zona Retro Venezuela">
+<circle cx="200" cy="200" r="150" fill="none" stroke="#3A3A3A" stroke-width="6"/>
+
+<rect x="110" y="110" width="180" height="180" rx="18" fill="none" stroke="#A2AE15" stroke-width="12"/>
+<rect x="150" y="150" width="40" height="40" fill="#A2AE15"/><rect x="210" y="150" width="40" height="40" fill="#A2AE15" opacity=".5"/>
+<rect x="150" y="210" width="40" height="40" fill="#A2AE15" opacity=".5"/><rect x="210" y="210" width="40" height="40" fill="#A2AE15"/>
+</svg>

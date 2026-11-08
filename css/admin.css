@@ -1,0 +1,328 @@
+/* ==========================================================================
+   NITROTOON · admin.css — dashboard de mantenimiento (Fase 2, §6)
+   --------------------------------------------------------------------------
+   Usa los mismos tokens de tokens.css: mismo idioma visual, sin azules.
+   Mobile-first: las columnas editor/preview se apilan bajo 56em.
+   ========================================================================== */
+
+/* ---- Cabecera y contenedor ----------------------------------------------- */
+.admin { padding-block: var(--sp-6) var(--sp-8); min-height: 60vh; }
+
+.admin__titulo {
+  color: var(--c-perla);
+  font-family: var(--t-display);
+  text-transform: uppercase;
+  letter-spacing: .08em;
+  font-size: var(--fs-pequeno);
+}
+
+.cabecera__fila { display: flex; align-items: center; gap: var(--sp-3); }
+.cabecera__fila .marca { margin-inline-end: auto; }
+
+/* BUG-4 (29/10, reportado por el usuario): tras entrar al panel, la ventana
+   de acceso seguía visible «como encabezado». Causa: en CSS, una regla del
+   autor (.admin__login display:grid · .btn display:inline-flex) vence al
+   display:none que el navegador aplica al atributo [hidden]. Esta regla
+   deja [hidden] por encima de cualquier display del dashboard: lo que está
+   oculto, está oculto de verdad — ventana de acceso, botón Salir, bloques. */
+body[data-pagina="admin"] [hidden] { display: none !important; }
+
+/* ---- Login ---------------------------------------------------------------- */
+.admin__login { display: grid; place-items: center; min-height: 50vh; }
+.admin__login-tarjeta {
+  width: min(26rem, 100%);
+  display: grid;
+  gap: var(--sp-4);
+  /* BUG-3 (29/10, reportado por el usuario): el borde --c-borde se perdía
+     contra el fondo (la tarjeta parecía «negro sobre negro») → borde
+     fuerte + contención: nada de la tarjeta puede salirse del marco. */
+  border-color: var(--c-borde-fuerte);
+  overflow: hidden;
+}
+/* BUG-3: el h1 heredaba --fs-display (hasta 4.3rem): la palabra
+   «administrador» no cabía en la tarjeta de 26rem, estiraba la columna de
+   la grilla y el input se salía del marco. En un panel manda el título,
+   no el cartel. */
+.admin__login-tarjeta h1 {
+  font-size: var(--fs-titulo);
+  overflow-wrap: anywhere;
+}
+.admin__login-tarjeta .btn { justify-self: start; }
+
+/* ---- Formularios (los publica el dashboard, no la vitrina) ---------------- */
+.campo { display: grid; gap: .4rem; }
+.campo > label {
+  color: var(--c-perla);
+  font-size: var(--fs-pequeno);
+  text-transform: uppercase;
+  letter-spacing: .06em;
+}
+.campo input[type="text"],
+.campo input[type="password"],
+.campo input[type="number"],
+.campo input[type="date"],
+.campo select,
+.campo textarea {
+  width: 100%;   /* BUG-3: los campos llenan su columna, nunca la desbordan */
+  background: var(--c-fondo);
+  border: 1px solid var(--c-borde-fuerte);
+  border-radius: var(--radio-s);
+  color: var(--c-texto);
+  padding: .6rem .8rem;
+  font: inherit;
+  min-height: 2.75rem;
+}
+.campo textarea { resize: vertical; }
+.campo small { line-height: 1.35; }
+
+.admin__estado {
+  color: var(--c-perla);
+  min-height: 1.4em;
+  margin-top: var(--sp-2);
+}
+.admin__estado:empty { margin-top: 0; }
+
+/* Interruptor "Visible" */
+.admin__switch {
+  display: inline-flex;
+  align-items: center;
+  gap: .5rem;
+  color: var(--c-perla);
+  font-size: var(--fs-pequeno);
+  cursor: pointer;
+  min-height: 2.75rem;
+}
+.admin__switch input { accent-color: var(--c-primario); width: 1.15rem; height: 1.15rem; }
+
+/* ---- Pestañas del panel ---------------------------------------------------- */
+.admin__pestanas { margin-bottom: var(--sp-5); }
+
+/* ---- Columnas editor / preview --------------------------------------------- */
+.admin__columnas {
+  display: grid;
+  gap: var(--sp-5);
+  grid-template-columns: 1fr;
+  align-items: start;
+}
+@media (min-width: 56em) {
+  .admin__columnas { grid-template-columns: minmax(0, 1fr) minmax(22rem, 30rem); }
+}
+
+/* MEJORA (MTTO-2, 29/10): la preview era un cuadro fijo de 24rem (384px) —
+   muy pequeño para juzgar una portada de ~1200px. Ahora: columna más ancha
+   por defecto + botón «Ancho completo» que pone la preview arriba, a toda
+   la fila, sin límite de altura. */
+.admin__preview-cabecera {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: .5rem;
+}
+.admin__preview-cabecera .admin__preview-titulo { margin-bottom: 0; }
+.admin__columnas--amplia { grid-template-columns: minmax(0, 1fr); }
+.admin__columnas--amplia .admin__editor { order: 2; }
+.admin__columnas--amplia .admin__preview { order: 1; position: static; }
+.admin__columnas--amplia .admin__preview-marco { max-height: none; }
+
+.admin__barra {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--sp-3);
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: var(--sp-2);
+}
+.admin__anadir { display: flex; align-items: center; gap: .5rem; }
+.admin__anadir label { color: var(--c-perla); font-size: var(--fs-pequeno); }
+.admin__anadir select {
+  background: var(--c-fondo);
+  border: 1px solid var(--c-borde-fuerte);
+  border-radius: var(--radio-s);
+  color: var(--c-texto);
+  padding: .45rem .6rem;
+  min-height: 2.75rem;
+  font: inherit;
+}
+
+/* ---- Lista de piezas arrastrables ------------------------------------------- */
+.admin__piezas { list-style: none; margin: 0; padding: 0; display: grid; gap: .6rem; }
+
+.admin__pieza {
+  display: grid;
+  grid-template-columns: auto 1fr auto auto;
+  gap: .75rem;
+  align-items: center;
+  background: var(--c-superficie);
+  border: 1px solid var(--c-borde);
+  border-radius: var(--radio-m);
+  padding: .7rem .9rem;
+  grid-auto-flow: row;
+}
+.admin__pieza[draggable="true"] { cursor: grab; }
+.admin__pieza--arrastrando { opacity: .45; }
+.admin__pieza--antes { box-shadow: 0 -3px 0 0 var(--c-primario); }
+.admin__pieza--despues { box-shadow: 0 3px 0 0 var(--c-primario); }
+
+.admin__pieza-asa { color: var(--espacio-acento); font-size: 1.1rem; }
+.admin__pieza-info { display: grid; gap: .15rem; min-width: 0; }
+.admin__pieza-info .texto-suave {
+  overflow: hidden; text-overflow: ellipsis; white-space: nowrap; max-width: 100%;
+}
+.admin__pieza-botones { display: flex; gap: .4rem; flex-wrap: wrap; justify-content: flex-end; }
+.admin__pieza-form {
+  grid-column: 1 / -1;
+  display: grid;
+  gap: .8rem;
+  border-top: 1px dashed var(--c-borde-fuerte);
+  padding-top: .8rem;
+  margin-top: .3rem;
+}
+
+.admin__quitar:hover { color: var(--c-fondo); background: var(--c-texto); }
+
+.admin__items { display: grid; gap: .6rem; }
+.admin__item { display: grid; grid-template-columns: 1fr 1fr; gap: .4rem; }
+@media (min-width: 40em) { .admin__item { grid-template-columns: repeat(4, 1fr) auto; } }
+.admin__item input {
+  background: var(--c-fondo);
+  border: 1px solid var(--c-borde-fuerte);
+  border-radius: var(--radio-s);
+  color: var(--c-texto);
+  padding: .4rem .6rem;
+  font: inherit;
+  font-size: var(--fs-pequeno);
+}
+
+/* ---- Vista previa en vivo ---------------------------------------------------- */
+.admin__preview { position: sticky; top: 5.5rem; }
+.admin__preview-titulo { margin-bottom: .6rem; }
+.admin__preview-marco {
+  background: var(--c-fondo);
+  border: 1px solid var(--c-borde-fuerte);
+  border-radius: var(--radio-m);
+  max-height: 70vh;
+  overflow: auto;
+  padding: 0;
+}
+/* dentro de la preview, las secciones renderizadas conservan su estilo público */
+.admin__preview-marco .hero { min-height: 18rem; }
+.admin__preview-marco .seccion { padding-block: var(--sp-4); }
+.admin__preview-marco .puertas { grid-template-columns: repeat(2, 1fr); }
+.admin__preview-marco .fichas { grid-template-columns: 1fr; }
+.admin__preview-marco .galeria { grid-template-columns: repeat(2, 1fr); }
+
+/* ---- Medios ------------------------------------------------------------------- */
+.admin__dropzone {
+  border: 2px dashed var(--c-borde-fuerte);
+  border-radius: var(--radio-m);
+  padding: var(--sp-5);
+  text-align: center;
+  color: var(--c-perla);
+  cursor: pointer;
+  transition: border-color var(--d-rapida), background var(--d-rapida);
+  margin-block: var(--sp-3);
+}
+.admin__dropzone:hover,
+.admin__dropzone--sobre,
+.admin__dropzone:focus-visible {
+  border-color: var(--c-primario);
+  background: var(--c-primario-a07, rgba(242, 183, 5, .07));
+  color: var(--c-texto);
+}
+
+.admin__medios { list-style: none; margin: var(--sp-3) 0 0; padding: 0; display: grid; gap: .6rem; }
+.admin__medio {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  gap: .8rem;
+  align-items: start;
+  background: var(--c-superficie);
+  border: 1px solid var(--c-borde);
+  border-radius: var(--radio-m);
+  padding: .7rem .9rem;
+}
+.admin__medio-vista {
+  width: 4rem; height: 4rem;
+  object-fit: cover;
+  border-radius: var(--radio-s);
+  border: 1px solid var(--c-borde);
+  display: grid; place-items: center;
+  font-size: 1.4rem;
+  background: var(--c-fondo);
+}
+.admin__medio-info { display: grid; gap: .25rem; min-width: 0; }
+.admin__medio-info code {
+  background: var(--c-fondo);
+  border: 1px solid var(--c-borde);
+  border-radius: var(--radio-s);
+  padding: .1rem .4rem;
+  font-size: var(--fs-micro);
+}
+.admin__medio-aviso { color: var(--c-primario); font-size: var(--fs-pequeno); }
+.admin__medio-botones { display: grid; gap: .4rem; justify-items: end; }
+
+.admin__pill {
+  display: inline-block;
+  border-radius: 999px;
+  border: 1px solid var(--c-borde-fuerte);
+  padding: .15rem .7rem;
+  font-size: var(--fs-micro);
+  text-transform: uppercase;
+  letter-spacing: .06em;
+}
+.admin__pill--ok { color: var(--c-acento); border-color: var(--c-acento); }
+.admin__pill--aviso { color: var(--c-primario); border-color: var(--c-primario); }
+.admin__pill--bloqueo { color: var(--c-texto); border-color: var(--c-texto); background: var(--c-negro-puro); }
+
+.admin__bloqueado {
+  display: flex;
+  align-items: start;
+  justify-content: space-between;
+  gap: .8rem;
+  border-color: var(--c-texto);
+}
+.admin__bloqueado > div { display: grid; gap: .2rem; min-width: 0; }
+
+/* ---- Publicar ------------------------------------------------------------------- */
+.admin__resumen {
+  border: 1px solid var(--c-borde-fuerte);
+  border-radius: var(--radio-m);
+  padding: var(--sp-4);
+  display: grid;
+  gap: .4rem;
+  background: var(--c-superficie);
+}
+.admin__pendiente { color: var(--c-primario); }
+.admin__acciones-publicar { display: flex; gap: .8rem; flex-wrap: wrap; margin-block: var(--sp-4); }
+
+.admin__form-pin { display: flex; gap: .8rem; flex-wrap: wrap; align-items: end; margin-top: .6rem; }
+.admin__form-pin .campo { min-width: 12rem; }
+
+.admin__codigo {
+  background: var(--c-fondo);
+  border: 1px solid var(--c-borde-fuerte);
+  border-radius: var(--radio-m);
+  padding: var(--sp-3);
+  overflow: auto;
+  font-family: var(--t-tabular);
+  font-size: var(--fs-pequeno);
+  color: var(--c-perla);
+  margin-top: .8rem;
+  white-space: pre-wrap;
+}
+
+.admin__ayuda .tabla { margin-top: .8rem; }
+.tabla--compacta { font-size: var(--fs-pequeno); }
+.tabla--compacta th, .tabla--compacta td { padding: .4rem .6rem; }
+
+/* ---- Pie del dashboard ------------------------------------------------------------ */
+.pie--admin { padding-block: var(--sp-4); }
+.pie--admin .contenedor {
+  display: flex; flex-wrap: wrap; gap: .8rem;
+  align-items: center; justify-content: space-between;
+}
+
+/* ---- Menos movimiento (K2) --------------------------------------------------------- */
+@media (prefers-reduced-motion: reduce) {
+  .admin__dropzone, .admin__pieza { transition: none; }
+}

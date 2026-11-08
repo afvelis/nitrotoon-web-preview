@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+  <meta name="robots" content="noindex, nofollow">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Puerta Mercado · Nitrotoon</title>
+<meta name="description" content="La puerta Mercado de Nitrotoon: merch, stans, coleccionistas y stands verificados. Zona retro, photocard trading y normas de venta claras.">
+<meta name="theme-color" content="#0A0A0A">
+<meta property="og:title" content="Puerta Mercado · Nitrotoon">
+<meta property="og:description" content="La puerta Mercado de Nitrotoon: merch, stans, coleccionistas y stands verificados. Zona retro, photocard trading y normas de venta claras.">
+<meta property="og:image" content="https://afvelis.github.io/nitrotoon-web-preview/assets/og.jpg">
+<link rel="icon" type="image/svg+xml" href="assets/favicon.svg">
+<link rel="stylesheet" href="css/tokens.css">
+<link rel="stylesheet" href="css/base.css">
+<link rel="stylesheet" href="css/componentes.css">
+<link rel="stylesheet" href="css/paginas.css">
+</head>
+<body data-pagina="mercado" data-espacio="mercado">
+
+<a class="salto-enlace" href="#contenido">Saltar al contenido</a>
+
+<!-- TOPE FIJO: cinta de entradas + cabecera de marca (una sola pieza sticky) -->
+<div class="tope">
+
+<!-- CINTA SUPERIOR: entradas + info del evento vigente (§2, §5.1) -->
+<div class="cinta">
+  <p class="cinta__info">
+    <span class="cinta__evento" data-cinta="nombre">Nitrotoon Fest 2027</span>
+    <span class="cinta__fecha" data-cinta="fecha">17 y 18 de julio de 2027</span>
+    <span class="cinta__cuenta" data-cinta="cuenta">Faltan días</span>
+  </p>
+  <a class="btn btn--primario btn--pequeno" data-cinta-cta href="https://www.instagram.com/nitrotoon/">
+    <span data-icono="ticket" style="width:17px;height:17px"></span>
+    Entradas
+  </a>
+</div>
+
+<!-- CABECERA DE MARCA -->
+<header class="cabecera">
+  <div class="contenedor cabecera__fila">
+    <a class="marca" href="index.html">
+      <img class="marca__logo" src="assets/logo-encabezado.png" alt="Nitrotoon" width="157" height="88">
+      <span class="marca__lema">Una comunidad de comunidades</span>
+    </a>
+    <nav class="nav-directa" aria-label="Secciones principales">
+      <ul>
+        <li><a href="eventos.html">Eventos</a></li>
+        <li><a href="artistas.html">Artistas</a></li>
+        <li><a href="programa.html">Programa</a></li>
+        <li><a href="galeria.html">Galería</a></li>
+      </ul>
+    </nav>
+    <button class="btn-menu" id="btn-menu" type="button" aria-haspopup="dialog">
+      <span class="btn-menu__rayas" aria-hidden="true"><span></span><span></span><span></span></span>
+      Menú
+    </button>
+  </div>
+</header>
+</div><!-- /tope -->
+
+<!-- MENÚ GIGANTE: agrupado por público, Esc cierra, foco atrapado (§7.2.3) -->
+<div class="mega" id="mega" data-abierto="false" role="dialog" aria-modal="true" aria-label="Menú de la vitrina">
+  <div class="contenedor mega__interior">
+    <div class="mega__barra">
+      <p class="mega__titulo">Nitrotoon · Menú</p>
+      <button class="btn btn--contorno btn--pequeno" id="mega-cerrar" type="button">Cerrar ✕</button>
+    </div>
+    <div class="mega__grupos">
+      <section class="mega__grupo" data-zona="mega-vitrina"></section>
+      <section class="mega__grupo" data-zona="mega-publico"></section>
+    </div>
+    <section class="mega__grupo" data-zona="mega-puertas"></section>
+  </div>
+</div>
+
+<main id="contenido">
+<section class="intro" data-insignia-seccion>
+  <div class="contenedor" data-zona="espacio-cabecera">
+    <p class="kicker">Puerta Mercado</p>
+    <h1>Merch, stans y coleccionistas</h1>
+    <p class="entradilla">La puerta del tesoro: merch de fandoms, figuras, cartas, retro y todo lo que tu estantería pide a gritos, con normas de venta claras.</p>
+    <div class="meta-pagina"><span>Stands verificados</span><span>Zona retro · Photocard trading</span></div>
+  </div>
+</section>
+
+<section class="seccion seccion--compacta" id="destacado-espacio" data-insignia-seccion aria-label="Destacado del espacio">
+  <div class="contenedor" data-zona="espacio">
+  <noscript><p class="aviso-sin-js">Esta pieza de la vitrina se arma con contenido dinámico desde data.js y necesita JavaScript. El resto de la página funciona igual.</p></noscript>
+  </div>
+</section>
+
+<section class="seccion seccion--compacta" id="otras-puertas" data-insignia-seccion aria-labelledby="otras-puertas-titulo">
+  <div class="contenedor">
+    <div class="cabecera-seccion">
+      <div>
+        <p class="kicker">Sigue explorando</p>
+        <h2 id="otras-puertas-titulo">Abre otra puerta</h2>
+        <p>La vitrina entera está conectada: cada comunidad tiene su salón.</p>
+      </div>
+    </div>
+    <div class="puertas" data-zona="hermanas">  </div>
+  </div>
+</section>
+
+</main>
+
+<!-- PIE: intranet por evento + acceso discreto al dashboard (§5.9) -->
+<footer class="pie">
+  <div class="contenedor">
+    <div class="pie__columnas">
+      <div class="pie__marca">
+        <a class="marca" href="index.html">
+          <img class="marca__logo" src="assets/logo-encabezado.png" alt="Nitrotoon" width="157" height="88">
+        </a>
+        <p>Una comunidad de comunidades. Convenciones geek en Venezuela hechas por y para la nave: anime, gamers, KPOP, cosplay, artistas, mercado y familias.</p>
+        <div class="pie__redes">
+          <a href="https://www.instagram.com/nitrotoon/" aria-label="Instagram de Nitrotoon" target="_blank" rel="noopener"><span data-icono="instagram"></span></a>
+          <a href="https://www.facebook.com/nitrotoon/" aria-label="Facebook de Nitrotoon" target="_blank" rel="noopener"><span data-icono="facebook"></span></a>
+        </div>
+      </div>
+      <nav aria-labelledby="pie-vitrina">
+        <h2 id="pie-vitrina">La vitrina</h2>
+        <ul class="pie__lista">
+          <li><a href="eventos.html">Eventos</a></li>
+          <li><a href="artistas.html">Artistas invitados</a></li>
+          <li><a href="programa.html">Programa</a></li>
+          <li><a href="galeria.html">Galería «así salió»</a></li>
+          <li><a href="normas.html">Normas de la comunidad</a></li>
+          <li><a href="aliados.html">Aliados y sponsors</a></li>
+          <li><a href="contacto.html">Contacto</a></li>
+          <li><a href="roadmap.html">Roadmap de crecimiento</a></li>
+        </ul>
+      </nav>
+      <nav aria-labelledby="pie-evento">
+        <h2 id="pie-evento">Tu evento</h2>
+        <ul class="pie__lista" data-zona="intranet"></ul>
+      </nav>
+    </div>
+    <div class="pie__legal">
+      <p>© <span id="anio">2026</span> Nitrotoon · Hecho con orgullo geek en Venezuela · <span data-version></span></p>
+      <a class="acceso-admin" data-acceso-admin hidden>Acceso administradores</a>
+    </div>
+  </div>
+</footer>
+
+<script src="data.js"></script>
+<script src="js/vitrina.js"></script>
+<script src="js/vistas.js"></script>
+<script src="js/insignia.js"></script>
+</body>
+</html>

@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dashboard de mantenimiento · Nitrotoon</title>
+  <meta name="description" content="Área de mantenimiento de la web de Nitrotoon. Acceso restringido al administrador.">
+  <meta name="robots" content="noindex, nofollow">
+  <link rel="icon" type="image/svg+xml" href="assets/favicon.svg">
+  <link rel="stylesheet" href="css/tokens.css">
+  <link rel="stylesheet" href="css/base.css">
+  <link rel="stylesheet" href="css/componentes.css">
+  <link rel="stylesheet" href="css/paginas.css">
+  <link rel="stylesheet" href="css/admin.css">
+<link rel="stylesheet" href="css/editor-secciones.css">
+</head>
+<body data-pagina="admin">
+  <a class="salto-enlace" href="#contenido">Saltar al contenido</a>
+
+  <!-- CABECERA: mínima, sin cinta de entradas (esto no es la vitrina) -->
+  <header class="cabecera">
+    <div class="contenedor cabecera__fila">
+      <a class="marca" href="index.html">
+        <img class="marca__logo" src="assets/logo-encabezado.png" alt="Nitrotoon" width="157" height="88">
+      </a>
+      <p class="admin__titulo">Dashboard de mantenimiento</p>
+      <a class="btn btn--contorno btn--pequeno" href="manual.html">¿Cómo se usa?</a>
+      <button class="btn btn--contorno btn--pequeno" id="btn-salir" type="button" hidden>Salir</button>
+    </div>
+  </header>
+
+  <main id="contenido" class="contenedor admin">
+
+    <!-- ─── LOGIN: PIN único con bloqueo por intentos (§6) ─── -->
+    <section id="vista-login" class="admin__login" aria-labelledby="login-titulo">
+      <div class="tarjeta admin__login-tarjeta">
+        <h1 id="login-titulo">Acceso del administrador</h1>
+        <p class="texto-suave">Introduce tu PIN de mantenimiento. La sesión vive solo en este navegador y caduca sola.</p>
+        <form id="form-login" novalidate>
+          <div class="campo">
+            <label for="pin">PIN</label>
+            <input id="pin" name="pin" type="password" autocomplete="off" spellcheck="false" required>
+          </div>
+          <button class="btn btn--primario" type="submit">Entrar</button>
+          <p id="login-estado" class="admin__estado" role="status" aria-live="polite"></p>
+        </form>
+      </div>
+    </section>
+
+    <!-- ─── PANEL PRINCIPAL ─── -->
+    <section id="vista-panel" hidden>
+      <!-- BARRA DE ESTADO PERMANENTE (F3): siempre visible, en todas las pestañas.
+           Dice sin adornos si lo publicado y lo que estás editando coinciden. -->
+      <div class="barra-estado" id="barra-estado" role="status" aria-live="polite">
+        <span class="barra-estado__punto" aria-hidden="true"></span>
+        <span class="barra-estado__texto" id="estado-texto">Cargando el estado…</span>
+        <span class="barra-estado__meta" id="estado-meta"></span>
+      </div>
+
+      <nav class="pestanas admin__pestanas" role="tablist" aria-label="Secciones del dashboard">
+        <button class="pestana" role="tab" type="button" id="tab-vitrina" aria-controls="panel-vitrina" aria-selected="true">Vitrina</button>
+        <button class="pestana" role="tab" type="button" id="tab-medios" aria-controls="panel-medios" aria-selected="false">Medios</button>
+        <button class="pestana" role="tab" type="button" id="tab-publicar" aria-controls="panel-publicar" aria-selected="false">Publicar</button>
+      </nav>
+
+      <!-- VITRINA: editor por secciones + vista previa en vivo -->
+      <div id="panel-vitrina" role="tabpanel" aria-labelledby="tab-vitrina" class="admin__panel">
+        <div class="admin__columnas">
+          <div class="admin__editor">
+            <div class="admin__barra">
+              <h2>Vitrina</h2>
+              <div class="admin__anadir">
+                <button class="btn btn--contorno btn--pequeno" id="btn-deshacer" type="button" disabled>↶ Deshacer</button>
+                <button class="btn btn--primario btn--pequeno" id="btn-ver-borrador" type="button">Ver la portada con estos cambios</button>
+              </div>
+            </div>
+            <p class="texto-suave">
+              Estas son las secciones de la portada, en el orden en que las ve el visitante.
+              <strong>La estructura está fija</strong>: solo cambias el contenido. Escribe texto plano
+              (sin HTML): lo que escribas se publica tal cual.
+            </p>
+
+            <!-- Editor por secciones: lo dibuja js/editor-secciones.js -->
+            <div id="editor-secciones"></div>
+
+            <!-- Composición avanzada: piezas libres que no son secciones fijas -->
+            <details class="admin__avanzado">
+              <summary>Composición avanzada (piezas libres)</summary>
+              <p class="texto-suave">
+                Aquí puedes añadir bloques sueltos a la portada —un aviso extra, una tarjeta, un enlace,
+                un carrusel— y reordenarlos. Para el día a día no hace falta.
+              </p>
+              <div class="admin__anadir">
+                <label for="nueva-pieza">Añadir pieza</label>
+                <select id="nueva-pieza">
+                  <option value="aviso">Aviso / noticia</option>
+                  <option value="tarjeta">Tarjeta de contenido</option>
+                  <option value="enlace">Botón / enlace</option>
+                  <option value="cuenta">Cuenta regresiva</option>
+                  <option value="reel">Reel destacado</option>
+                  <option value="carrusel">Carrusel (manual)</option>
+                </select>
+                <button class="btn btn--contorno btn--pequeno" id="btn-anadir" type="button">Añadir</button>
+              </div>
+              <ul id="lista-piezas" class="admin__piezas"></ul>
+            </details>
+          </div>
+          <aside class="admin__preview" aria-label="Vista previa en vivo">
+            <div class="admin__preview-cabecera">
+              <h3 class="admin__preview-titulo">Vista previa en vivo <span id="preview-pieza" class="texto-micro texto-suave"></span></h3>
+              <button class="btn btn--contorno btn--pequeno" id="btn-ampliar" type="button">Ancho completo</button>
+            </div>
+            <div id="contenedor-preview" class="admin__preview-marco"></div>
+          </aside>
+        </div>
+      </div>
+
+      <!-- MEDIOS: biblioteca con validación técnica (§6) -->
+      <div id="panel-medios" role="tabpanel" aria-labelledby="tab-medios" hidden class="admin__panel">
+        <div class="admin__columnas">
+          <div class="admin__editor">
+            <h2>Biblioteca de medios</h2>
+            <div id="zona-soltar" class="admin__dropzone" role="button" tabindex="0" aria-label="Soltar archivos aquí o pulsar Enter para elegirlos">
+              <p><strong>Arrastra aquí tus archivos</strong><br>o pulsa Enter / haz clic para elegirlos.</p>
+              <input id="input-medios" type="file" multiple hidden
+                     accept=".jpg,.jpeg,.png,.webp,.svg,.mp4,image/jpeg,image/png,image/webp,image/svg+xml,video/mp4">
+            </div>
+            <p id="estado-medios" class="admin__estado" role="status" aria-live="polite"></p>
+            <ul id="lista-medios" class="admin__medios"></ul>
+          </div>
+          <aside class="admin__ayuda" aria-labelledby="ayuda-titulo">
+            <h3 id="ayuda-titulo">Especificaciones de medios (§6)</h3>
+            <p class="texto-suave">La biblioteca solo <strong>bloquea</strong> lo que rompería la web (formato incorrecto o peso extremo). Lo demás pasa con avisos y consejos claros.</p>
+            <table class="tabla tabla--compacta">
+              <caption>Formatos, medidas y peso máximo por tipo de pieza</caption>
+              <thead><tr><th scope="col">Pieza</th><th scope="col">Formato</th><th scope="col">Medida</th><th scope="col">Peso</th></tr></thead>
+              <tbody>
+                <tr><td>Retrato de artista</td><td>JPG · PNG · WebP</td><td>800×800 exactos</td><td>≤ 0,5 MB</td></tr>
+                <tr><td>Foto de galería</td><td>JPG · PNG · WebP</td><td>3:2, mín. 1600 px ancho</td><td>≤ 0,8 MB</td></tr>
+                <tr><td>Logo de aliado</td><td>PNG · SVG</td><td>mín. 600×400</td><td>≤ 0,3 MB</td></tr>
+                <tr><td>Video de portada</td><td>MP4 (H.264)</td><td>1920×1080, 6–15 s</td><td>≤ 20 MB</td></tr>
+                <tr><td>Póster del video</td><td>JPG · PNG</td><td>1920×1080</td><td>≤ 0,4 MB</td></tr>
+                <tr><td>Reel de galería</td><td>MP4 o imagen fachada</td><td>vertical 9:16</td><td>≤ 50 MB</td></tr>
+                <tr><td>Logo de marca</td><td>PNG</td><td>mín. 1280 px ancho</td><td>≤ 0,5 MB</td></tr>
+                <tr><td>og:image (redes)</td><td>JPG · PNG</td><td>1200×630 exactos</td><td>≤ 0,5 MB</td></tr>
+              </tbody>
+            </table>
+            <p class="texto-suave">Consejo de compresión: JPG calidad 80 para fotos, WebP si puedes, y recorta los videos con HandBrake antes de subirlos.</p>
+          </aside>
+        </div>
+      </div>
+
+      <!-- PUBLICAR: genera data.js + checklist exacta (§6) -->
+      <div id="panel-publicar" role="tabpanel" aria-labelledby="tab-publicar" hidden class="admin__panel">
+        <h2>Publicar</h2>
+        <div id="resumen-publicar" class="admin__resumen" aria-live="polite"></div>
+
+        <!-- F4: revisión previa. Nada se genera sin haber mirado esto. -->
+        <section class="norma" aria-labelledby="revision-titulo">
+          <h3 id="revision-titulo">Revisión antes de generar</h3>
+          <p class="texto-suave">Esto es lo que puede hacer que la portada se vea mal. Si algo está en rojo, conviene arreglarlo antes de publicar.</p>
+          <ul id="lista-revision" class="lista-revision" aria-live="polite"></ul>
+        </section>
+
+        <div class="admin__acciones-publicar">
+          <button class="btn btn--primario" id="btn-generar" type="button">Generar data.js</button>
+          <button class="btn btn--contorno" id="btn-descartar" type="button">Descartar borrador</button>
+        </div>
+
+        <!-- F4: árbol de publicación. Tres pasos que se marcan uno a uno. -->
+        <section class="norma" aria-labelledby="arbol-titulo">
+          <h3 id="arbol-titulo">Los tres pasos de publicar</h3>
+          <p class="texto-suave">Ningún paso se marca solo: los confirmas tú, para que nunca creas que algo está publicado cuando no lo está.</p>
+          <ol id="lista-arbol" class="arbol-publicacion"></ol>
+        </section>
+
+        <section class="norma" aria-labelledby="checklist-titulo">
+          <h3 id="checklist-titulo">Checklist para subir a GitHub</h3>
+          <ol id="lista-checklist" class="lista-simple"></ol>
+        </section>
+
+        <section class="norma" aria-labelledby="pin-titulo">
+          <h3 id="pin-titulo">Cambiar el PIN</h3>
+          <p class="texto-suave">El PIN nunca se guarda: solo su hash. Al cambiarlo, pega el hash nuevo en <code>js/admin-acceso.js</code> y súbelo junto con data.js.</p>
+          <form id="form-pin" class="admin__form-pin" novalidate>
+            <div class="campo">
+              <label for="pin-nuevo">PIN nuevo</label>
+              <input id="pin-nuevo" type="password" autocomplete="new-password" spellcheck="false">
+            </div>
+            <div class="campo">
+              <label for="pin-confirmar">Repetir PIN nuevo</label>
+              <input id="pin-confirmar" type="password" autocomplete="new-password" spellcheck="false">
+            </div>
+            <button class="btn btn--contorno" type="submit">Calcular hash</button>
+          </form>
+          <p id="pin-estado" class="admin__estado" role="status" aria-live="polite"></p>
+          <pre id="pin-resultado" class="admin__codigo" hidden></pre>
+        </section>
+      </div>
+    </section>
+  </main>
+
+  <footer class="pie pie--admin">
+    <div class="contenedor">
+      <p>Dashboard de mantenimiento · Nitrotoon · <span data-version></span></p>
+      <a class="acceso-admin" href="index.html">Volver a la vitrina</a>
+    </div>
+  </footer>
+
+  <script src="data.js"></script>
+  <script src="js/vitrina.js"></script>
+  <script src="js/vistas.js"></script>
+  <script src="js/secciones.js"></script>
+  <script src="js/editor-secciones.js"></script>
+  <script src="js/sha256.js"></script>
+  <script src="js/admin-acceso.js"></script>
+  <script src="js/admin.js"></script>
+</body>
+</html>

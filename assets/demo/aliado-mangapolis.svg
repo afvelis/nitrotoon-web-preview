@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 400" role="img" aria-label="Marca demo de Librería Mangápolis">
+<circle cx="200" cy="200" r="150" fill="none" stroke="#3A3A3A" stroke-width="6"/>
+
+<path d="M200 120 C160 96 120 96 92 112 V288 C120 272 160 272 200 296 Z" fill="none" stroke="#A2AE15" stroke-width="12" stroke-linejoin="round"/>
+<path d="M200 120 C240 96 280 96 308 112 V288 C280 272 240 272 200 296 Z" fill="none" stroke="#A2AE15" stroke-width="12" stroke-linejoin="round"/>
+<path d="M200 120 V296" stroke="#A2AE15" stroke-width="8"/>
+</svg>

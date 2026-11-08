@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 400" role="img" aria-label="Marca demo de Domingueada Friki">
+<circle cx="200" cy="200" r="150" fill="none" stroke="#3A3A3A" stroke-width="6"/>
+
+<circle cx="200" cy="200" r="62" fill="none" stroke="#B3B3B3" stroke-width="12"/>
+<g stroke="#B3B3B3" stroke-width="10" stroke-linecap="round">
+<path d="M200 84 V44 M200 356 V316 M84 200 H44 M356 200 H316 M120 120 L92 92 M308 308 L280 280 M280 120 L308 92 M92 308 L120 280"/>
+</g>
+</svg>

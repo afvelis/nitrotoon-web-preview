@@ -1,0 +1,389 @@
+/* ==========================================================================
+   NITROTOON · skins.css — identidades completas de las puertas (Fase 3, §5.2)
+   --------------------------------------------------------------------------
+   Cada puerta insignia recibe su propia piel, SOLO CSS sobre el mismo DOM
+   (body[data-espacio="…"]) y SOLO con la paleta oficial §7.1:
+   · OTAKU  — manga: speedlines, kanji 夢 de agua, torii, globos de diálogo
+              (acento verde ácido #A2AE15)
+   · GAMERS — arcade: CRT scanlines, esquinas HUD, barra de HP, grid
+              (acento blanco #FFFFFF)
+   · KPOP   — light ocean: mar de luces doradas, photocards, ticket stubs
+              (acento dorado #F2B705)
+   Sin imágenes nuevas (todo son gradientes y un SVG en data-URI), sin
+   autoplay, sin azules. Los detalles que se mueven mueren solos con el
+   interruptor global de prefers-reduced-motion de base.css (K2).
+   ========================================================================== */
+
+/* ==========================================================================
+   1 · OTAKU — «se habla en capítulos»
+   ========================================================================== */
+[data-espacio="otaku"] .intro {
+  position: relative;
+  overflow: hidden;
+  /* speedlines de manga: diagonales finas, apenas visibles */
+  background-image:
+    repeating-linear-gradient(115deg,
+      transparent 0 26px,
+      var(--verde-a14) 26px 27.5px,
+      transparent 27.5px 64px);
+}
+
+/* Kanji 夢 (sueño) gigante de agua, contorneado, fuera del flujo.
+   El "/ """ lo marca como decorativo para lectores de pantalla (F3-2). */
+[data-espacio="otaku"] .intro .contenedor::before {
+  content: "夢" / "";
+  position: absolute;
+  inset-block-start: -4rem;
+  inset-inline-end: -2.5rem;
+  font-size: clamp(14rem, 30vw, 24rem);
+  line-height: 1;
+  font-weight: 700;
+  color: transparent;
+  -webkit-text-stroke: 2px var(--verde-a14);
+  pointer-events: none;
+  user-select: none;
+  z-index: 0;
+}
+@supports not (-webkit-text-stroke: 1px #000) {
+  [data-espacio="otaku"] .intro .contenedor::before { color: var(--verde-a14); }
+}
+
+/* Torii en trazo fino, esquina superior (SVG en data-URI, sin red) */
+[data-espacio="otaku"] .intro::after {
+  content: "";
+  position: absolute;
+  inset-inline-end: 4%;
+  inset-block-start: 0;
+  width: 118px;
+  height: 88px;
+  background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 96 72' fill='none' stroke='%23A2AE15' stroke-opacity='.30' stroke-width='2.6' stroke-linecap='round'%3E%3Cpath d='M8 14c22-6 58-6 80 0M12 22h72M20 22 17 66M76 22l3 44M48 22v7M33 29h30'/%3E%3Cpath d='M25 29v5M71 29v5'/%3E%3C/svg%3E") no-repeat center / contain;
+  opacity: .8;
+  pointer-events: none;
+}
+
+/* Kicker estilo SFX de manga: encorchetado y ligeramente girado */
+[data-espacio="otaku"] .kicker {
+  display: inline-block;
+  border: 2px solid var(--c-acento);
+  background: var(--verde-a14);
+  border-radius: 4px;
+  padding: .25rem .8rem;
+  transform: rotate(-2deg);
+}
+[data-espacio="otaku"] .kicker::before { content: "「" / ""; }
+[data-espacio="otaku"] .kicker::after  { content: "」" / ""; }
+
+/* Título con subrayado de marcador verde */
+[data-espacio="otaku"] .intro h1,
+[data-espacio="otaku"] .cabecera-seccion h2 {
+  background: linear-gradient(transparent 78%, var(--verde-a35) 78%) no-repeat 0 100% / 100% .38em;
+}
+
+/* Etiquetas meta tipo tomo de manga */
+[data-espacio="otaku"] .meta-pagina span {
+  display: inline-block;
+  border: 1px solid var(--c-borde-fuerte);
+  background: var(--verde-a14);
+  transform: skewX(-6deg);
+  border-radius: 3px;
+}
+
+/* Destacado como globo de diálogo con cola */
+[data-espacio="otaku"] .destacado-espacio {
+  position: relative;
+  border: 2px solid var(--c-acento);
+  background: var(--c-superficie);
+}
+[data-espacio="otaku"] .destacado-espacio::after {
+  content: "";
+  position: absolute;
+  pointer-events: none;
+  inset-block-end: -11px;
+  inset-inline-start: 3.2rem;
+  width: 18px;
+  height: 18px;
+  background: var(--c-superficie);
+  border-inline-end: 2px solid var(--c-acento);
+  border-block-end: 2px solid var(--c-acento);
+  transform: rotate(45deg) skew(8deg, 8deg);
+}
+
+/* Lista como viñetas de conversación */
+[data-espacio="otaku"] .lista-simple li {
+  background: var(--blanco-a07);
+  border-inline-start: 3px solid var(--c-acento);
+  border-radius: var(--radio-s);
+  padding: .7rem 1rem;
+}
+[data-espacio="otaku"] .lista-simple strong { color: var(--c-acento); }
+
+/* Botón de la puerta: relleno de tinta al enfocar */
+[data-espacio="otaku"] .btn--espacio:hover,
+[data-espacio="otaku"] .btn--espacio:focus-visible {
+  background: var(--c-acento);
+  color: var(--c-negro-puro);
+  border-color: var(--c-acento);
+}
+
+/* ==========================================================================
+   2 · GAMERS — «inserta moneda para continuar»
+   ========================================================================== */
+[data-espacio="gamers"] .intro {
+  position: relative;
+  overflow: hidden;
+}
+
+/* CRT: scanlines horizontales sobre toda la cabecera */
+[data-espacio="gamers"] .intro::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: repeating-linear-gradient(0deg,
+    rgba(255, 255, 255, .035) 0 1px,
+    transparent 1px 4px);
+  pointer-events: none;
+}
+
+/* Grid de piso arcade, desvanecido hacia arriba */
+[data-espacio="gamers"] .intro::after {
+  content: "";
+  position: absolute;
+  inset-inline: 0;
+  inset-block-end: 0;
+  height: 46%;
+  background:
+    repeating-linear-gradient(90deg, rgba(255, 255, 255, .05) 0 1px, transparent 1px 72px),
+    repeating-linear-gradient(0deg, rgba(255, 255, 255, .05) 0 1px, transparent 1px 44px);
+  -webkit-mask-image: linear-gradient(transparent, #000 65%);
+  mask-image: linear-gradient(transparent, #000 65%);
+  pointer-events: none;
+}
+
+/* Esquinas HUD en el contenedor de la cabecera */
+[data-espacio="gamers"] .intro .contenedor {
+  position: relative;
+}
+[data-espacio="gamers"] .intro .contenedor::before,
+[data-espacio="gamers"] .intro .contenedor::after {
+  content: "";
+  position: absolute;
+  width: 34px;
+  height: 34px;
+  pointer-events: none;
+  opacity: .7;
+}
+[data-espacio="gamers"] .intro .contenedor::before {
+  inset-block-start: -1.4rem;
+  inset-inline-start: -1.4rem;
+  border-block-start: 2px solid var(--c-texto);
+  border-inline-start: 2px solid var(--c-texto);
+}
+[data-espacio="gamers"] .intro .contenedor::after {
+  inset-block-end: -1.4rem;
+  inset-inline-end: -1.4rem;
+  border-block-end: 2px solid var(--c-texto);
+  border-inline-end: 2px solid var(--c-texto);
+}
+
+/* Kicker estilo insert-coin */
+[data-espacio="gamers"] .kicker {
+  display: inline-block;
+  font-family: var(--t-tabular);
+  letter-spacing: .28em;
+  text-transform: uppercase;
+  border: 1px solid var(--blanco-a14);
+  border-radius: 2px;
+  padding: .35rem .9rem;
+}
+[data-espacio="gamers"] .kicker::before {
+  content: "▶" / "";
+  margin-inline-end: .6em;
+  color: var(--c-texto);
+}
+
+/* Título con brillo de fósforo */
+[data-espacio="gamers"] .intro h1 {
+  text-shadow: 0 0 22px rgba(255, 255, 255, .16);
+}
+
+/* Etiquetas meta como chips de HUD */
+[data-espacio="gamers"] .meta-pagina span {
+  display: inline-block;
+  font-family: var(--t-tabular);
+  font-size: var(--fs-pequeno);
+  letter-spacing: .08em;
+  border: 1px solid var(--blanco-a14);
+  border-radius: 2px;
+  padding: .3rem .7rem;
+}
+[data-espacio="gamers"] .meta-pagina span::before {
+  content: "▸ ";
+  color: var(--c-texto);
+}
+
+/* Destacado como panel HUD con esquina recortada y barra de HP */
+[data-espacio="gamers"] .destacado-espacio {
+  position: relative;
+  clip-path: polygon(0 0, calc(100% - 22px) 0, 100% 22px, 100% 100%, 0 100%);
+  background: linear-gradient(160deg, var(--blanco-a07), transparent 42%);
+}
+[data-espacio="gamers"] .destacado-espacio::after {
+  content: "";
+  position: absolute;
+  pointer-events: none;
+  inset-inline-start: 1.5rem;
+  inset-block-end: 1rem;
+  width: min(58%, 260px);
+  height: 7px;
+  background: repeating-linear-gradient(90deg,
+    var(--c-texto) 0 22px,
+    rgba(255, 255, 255, .18) 22px 28px);
+  border-radius: 2px;
+}
+[data-espacio="gamers"] .destacado-espacio { padding-block-end: 2.6rem; }
+
+/* Lista como misiones */
+[data-espacio="gamers"] .lista-simple li {
+  background: var(--blanco-a07);
+  border-inline-start: 3px solid var(--c-texto);
+  border-radius: var(--radio-s);
+  padding: .7rem 1rem;
+}
+[data-espacio="gamers"] .lista-simple li::before {
+  content: "▸" / "";
+  color: var(--c-texto);
+  font-size: 1em;
+}
+[data-espacio="gamers"] .lista-simple strong { color: var(--c-texto); }
+
+/* Botón: encendido de pantalla al enfocar */
+[data-espacio="gamers"] .btn--espacio:hover,
+[data-espacio="gamers"] .btn--espacio:focus-visible {
+  box-shadow: 0 0 0 2px var(--c-fondo), 0 0 18px rgba(255, 255, 255, .35);
+}
+
+/* ==========================================================================
+   3 · KPOP — «el mar de luces se enciende contigo»
+   ========================================================================== */
+[data-espacio="kpop"] .intro {
+  position: relative;
+  overflow: hidden;
+}
+
+/* Mar de luces: dos capas de puntos dorados desfasados (lightsticks) */
+[data-espacio="kpop"] .intro::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-image:
+    radial-gradient(rgba(242, 183, 5, .18) 1.6px, transparent 1.8px),
+    radial-gradient(rgba(242, 183, 5, .10) 1.2px, transparent 1.4px);
+  background-size: 36px 27px, 54px 39px;
+  background-position: 0 0, 18px 13px;
+  -webkit-mask-image: linear-gradient(#000 55%, transparent);
+  mask-image: linear-gradient(#000 55%, transparent);
+  pointer-events: none;
+}
+
+/* Kicker como etiqueta de lightstick */
+[data-espacio="kpop"] .kicker {
+  display: inline-block;
+  border: 1px solid var(--c-primario);
+  color: var(--c-primario);
+  border-radius: 999px;
+  padding: .3rem 1rem;
+  letter-spacing: .12em;
+}
+
+/* Título con doble subrayado dorado (dos líneas de luces) */
+[data-espacio="kpop"] .intro h1,
+[data-espacio="kpop"] .cabecera-seccion h2 {
+  background:
+    linear-gradient(var(--c-primario), var(--c-primario)) no-repeat 0 100% / 100% 2px,
+    linear-gradient(var(--dorado-a28), var(--dorado-a28)) no-repeat 0 calc(100% + 4px) / 62% 1px;
+  padding-block-end: .35rem;
+}
+
+/* Etiquetas meta como ticket stubs con picado */
+[data-espacio="kpop"] .meta-pagina span {
+  display: inline-block;
+  position: relative;
+  border: 1px dashed var(--c-primario);
+  color: var(--c-perla);
+  border-radius: 6px;
+  padding: .35rem .9rem .35rem 1.6rem;
+}
+[data-espacio="kpop"] .meta-pagina span::before {
+  content: "";
+  position: absolute;
+  inset-inline-start: .55rem;
+  inset-block-start: 50%;
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--c-fondo);
+  border: 1px solid var(--c-primario);
+  transform: translateY(-50%);
+}
+
+/* Destacado como photocard: marco blanco y brillo al enfocar */
+[data-espacio="kpop"] .destacado-espacio {
+  position: relative;
+  border: 5px solid rgba(255, 255, 255, .92);
+  border-radius: var(--radio-m);
+  background: var(--c-superficie);
+  overflow: hidden;
+}
+[data-espacio="kpop"] .destacado-espacio::after {
+  content: "";
+  position: absolute;
+  inset-block-start: -60%;
+  inset-inline-start: -30%;
+  width: 36%;
+  height: 220%;
+  background: linear-gradient(100deg, transparent, rgba(255, 255, 255, .10), transparent);
+  transform: rotate(12deg);
+  transition: inset-inline-start .5s var(--e-nitro);
+  pointer-events: none;
+}
+[data-espacio="kpop"] .destacado-espacio:hover::after,
+[data-espacio="kpop"] .destacado-espacio:focus-within::after {
+  inset-inline-start: 110%;
+}
+
+/* Lista como tracklist numerada */
+[data-espacio="kpop"] .lista-simple { counter-reset: pista; }
+[data-espacio="kpop"] .lista-simple li {
+  background: var(--dorado-a14);
+  border-inline-start: 3px solid var(--c-primario);
+  border-radius: var(--radio-s);
+  padding: .7rem 1rem .7rem 3rem;
+  position: relative;
+}
+[data-espacio="kpop"] .lista-simple li::before {
+  counter-increment: pista;
+  content: "0" counter(pista);
+  position: absolute;
+  inset-inline-start: .9rem;
+  inset-block-start: 50%;
+  transform: translateY(-50%);
+  font-family: var(--t-tabular);
+  color: var(--c-primario);
+  font-size: var(--fs-pequeno);
+}
+[data-espacio="kpop"] .lista-simple li::marker { content: none; }
+
+/* Botón: brillo de lightstick al enfocar */
+[data-espacio="kpop"] .btn--espacio:hover,
+[data-espacio="kpop"] .btn--espacio:focus-visible {
+  box-shadow: 0 0 0 2px var(--c-fondo), 0 0 20px var(--dorado-a28);
+}
+
+/* ==========================================================================
+   4 · Menos movimiento (K2) — doble seguro local
+   ========================================================================== */
+@media (prefers-reduced-motion: reduce) {
+  [data-espacio="kpop"] .destacado-espacio::after { transition: none; }
+  [data-espacio="otaku"] .kicker,
+  [data-espacio="otaku"] .meta-pagina span { transform: none; }
+}

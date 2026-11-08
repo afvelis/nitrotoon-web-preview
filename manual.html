@@ -1,0 +1,351 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow"><!-- PREVIEW: no indexar -->
+<title>Cómo usar el dashboard · Nitrotoon</title>
+<meta name="description" content="Manual del administrador de Nitrotoon: como actualizar la web con el editor por secciones, paso a paso y sin saber programar.">
+<meta name="theme-color" content="#0A0A0A">
+<link rel="icon" type="image/svg+xml" href="assets/favicon.svg">
+<link rel="stylesheet" href="css/tokens.css">
+<link rel="stylesheet" href="css/base.css">
+<link rel="stylesheet" href="css/componentes.css">
+<link rel="stylesheet" href="css/paginas.css">
+<link rel="stylesheet" href="css/admin.css">
+<link rel="stylesheet" href="css/editor-secciones.css">
+<style>
+  /* Estilos propios de esta página: el manual se lee cómodo y sin prisa. */
+  .manual { max-width: 46rem; }
+  .manual__intro {
+    border-left: 3px solid var(--c-primario);
+    padding-inline-start: var(--sp-3);
+    margin-block: var(--sp-3);
+  }
+  .manual__indice {
+    background: var(--c-superficie);
+    border: 1px solid var(--c-borde);
+    border-radius: var(--radio-m);
+    padding: var(--sp-3);
+    margin-block: var(--sp-4);
+  }
+  .manual__indice ol { margin: 0; padding-inline-start: 1.2rem; }
+  .manual__indice a { color: var(--c-primario); text-decoration: none; }
+  .manual__indice a:hover, .manual__indice a:focus { text-decoration: underline; }
+  .manual__paso {
+    border-top: 1px solid var(--c-borde);
+    padding-block: var(--sp-4);
+  }
+  .manual__paso h2 {
+    font-family: var(--t-display);
+    font-size: clamp(1.3rem, 3vw, 1.8rem);
+    letter-spacing: .04em;
+    text-transform: uppercase;
+    color: var(--c-texto);
+    margin-block-end: var(--sp-2);
+  }
+  .manual__paso h3 {
+    font-size: var(--fs-sub);
+    color: var(--c-primario);
+    margin-block: var(--sp-3) var(--sp-2);
+  }
+  .manual__paso p, .manual__paso li { max-width: var(--ancho-lectura); line-height: 1.65; }
+  .manual__paso ul, .manual__paso ol { padding-inline-start: 1.3rem; color: var(--c-perla); }
+  .manual__paso li { margin-block-end: .4rem; }
+  .manual__caja {
+    background: var(--c-superficie);
+    border: 1px solid var(--c-borde-fuerte);
+    border-radius: var(--radio-s);
+    padding: var(--sp-3);
+    margin-block: var(--sp-3);
+  }
+  .manual__caja--ok { border-left: 3px solid var(--c-acento); }
+  .manual__caja--ojo { border-left: 3px solid var(--c-primario); }
+  .manual__caja p:last-child { margin-block-end: 0; }
+  .manual__btn {
+    display: inline-block;
+    background: var(--c-primario);
+    color: var(--c-fondo);
+    font-weight: 700;
+    padding: .35rem .7rem;
+    border-radius: var(--radio-s);
+    font-size: var(--fs-micro);
+    letter-spacing: .06em;
+    text-transform: uppercase;
+  }
+  .manual__volver {
+    position: sticky;
+    bottom: 0;
+    background: var(--c-fondo);
+    border-top: 1px solid var(--c-borde);
+    padding: var(--sp-3) 0;
+    margin-block-start: var(--sp-4);
+  }
+  kbd {
+    background: var(--c-superficie);
+    border: 1px solid var(--c-borde-fuerte);
+    border-bottom-width: 2px;
+    border-radius: 4px;
+    padding: .05rem .35rem;
+    font-family: var(--t-tabular);
+    font-size: .85em;
+    color: var(--c-texto);
+  }
+</style>
+</head>
+<body data-pagina="manual">
+
+<a class="salto-enlace" href="#contenido">Saltar al contenido</a>
+
+<!-- CABECERA: mínima, igual que admin.html (esto no es la vitrina) -->
+<header class="cabecera">
+  <div class="contenedor cabecera__fila">
+    <a class="marca" href="index.html">
+      <img class="marca__logo" src="assets/logo-encabezado.png" alt="Nitrotoon" width="157" height="88">
+    </a>
+    <p class="admin__titulo">Manual del dashboard</p>
+    <a class="btn btn--contorno btn--pequeno" href="admin.html">Volver al dashboard</a>
+  </div>
+</header>
+
+<main id="contenido">
+  <div class="contenedor manual">
+
+    <h1>Cómo usar el dashboard</h1>
+
+    <div class="manual__intro">
+      <p><strong>Este dashboard sirve para una sola cosa:</strong> cambiar lo que dice la web sin romper el diseño.
+        No hace falta saber programar. Si sabes usar WhatsApp, sabes usar esto.</p>
+      <p class="texto-suave">La estructura de la página está fija a propósito: no puedes mover secciones ni cambiar
+        colores, y eso es una ventaja. Significa que no puedes estropear la web sin querer.</p>
+    </div>
+
+    <nav class="manual__indice" aria-labelledby="indice-titulo">
+      <h2 id="indice-titulo" class="texto-micro" style="letter-spacing:.14em;text-transform:uppercase;color:var(--c-perla)">Contenido</h2>
+      <ol>
+        <li><a href="#paso-1">Entrar y entender la pantalla</a></li>
+        <li><a href="#paso-2">Cambiar un texto</a></li>
+        <li><a href="#paso-3">Entender los colores de los contadores</a></li>
+        <li><a href="#paso-4">Poner una imagen</a></li>
+        <li><a href="#paso-5">Los dos interruptores de cada sección</a></li>
+        <li><a href="#paso-6">Ver cómo va quedando</a></li>
+        <li><a href="#paso-7">Publicar los cambios</a></li>
+        <li><a href="#paso-8">Si algo sale mal</a></li>
+        <li><a href="#paso-9">Qué NO se puede hacer aquí</a></li>
+      </ol>
+    </nav>
+
+    <section class="manual__paso" id="paso-1">
+      <h2>1 · Entrar y entender la pantalla</h2>
+      <p>Entra a <strong>admin.html</strong> y escribe tu PIN. Verás tres pestañas arriba: <strong>Vitrina</strong>,
+        <strong>Medios</strong> y <strong>Publicar</strong>.</p>
+      <h3>La barra de estado</h3>
+      <p>Lo primero que ves, arriba del todo, es una franja de color. Es la más importante de la pantalla:</p>
+      <div class="manual__caja manual__caja--ok">
+        <p><strong>Verde · «Todo publicado»</strong><br>
+          Lo que ves es exactamente lo que ve el público. No hay nada pendiente.</p>
+      </div>
+      <div class="manual__caja manual__caja--ojo">
+        <p><strong>Amarillo · «N cambios sin publicar»</strong><br>
+          Has tocado algo, pero eso todavía está solo en tu computadora. El público no lo ve.
+          Hay que descargar el archivo y subirlo (paso 7).</p>
+      </div>
+      <div class="manual__caja">
+        <p><strong>Blanco · «data.js descargado, falta subirlo»</strong><br>
+          Ya generaste el archivo, pero no lo has subido a GitHub. Estás a un paso.</p>
+      </div>
+      <p class="texto-suave">A la derecha de la barra se ve la hora del último guardado. Tus cambios se guardan solos:
+        puedes cerrar el navegador y seguir donde ibas.</p>
+    </section>
+
+    <section class="manual__paso" id="paso-2">
+      <h2>2 · Cambiar un texto</h2>
+      <ol>
+        <li>En la pestaña <strong>Vitrina</strong>, busca la tarjeta de la sección que quieres cambiar.</li>
+        <li>Haz clic en el campo y escribe. Verás que a los pocos segundos la barra de estado pasa a amarillo.</li>
+        <li>La vista previa de la derecha se actualiza mientras escribes.</li>
+      </ol>
+      <div class="manual__caja manual__caja--ojo">
+        <p><strong>Escribe texto normal, sin negritas ni enlaces.</strong> Lo que escribas sale tal cual en la web.
+          No pegues texto con formato desde Word o WhatsApp: usa el Bloc de notas como puente si hace falta.</p>
+      </div>
+      <h3>El campo de las disciplinas</h3>
+      <p>Es una lista: cada línea es un elemento. Para quitar uno, borra su línea entera. Para añadir, escribe en una
+        línea nueva.</p>
+    </section>
+
+    <section class="manual__paso" id="paso-3">
+      <h2>3 · Entender los colores de los contadores</h2>
+      <p>Debajo de cada campo hay una línea pequeña que dice algo como <em>«23 de ~34 · espacio de sobra»</em>.
+        Ese es el contador: te dice cuánto cabe en el diseño, que ya está calculado para ti.</p>
+      <ul>
+        <li><strong>Verde·</strong> «espacio de sobra» — perfecto.</li>
+        <li><strong>Amarillo ·</strong> «al límite» — se sigue viendo bien, pero ya no cabe más.</li>
+        <li><strong>Rojo ·</strong> «se pasa: el diseño aguanta ~48» — si sigues escribiendo se verá apretado.</li>
+      </ul>
+      <div class="manual__caja manual__caja--ok">
+        <p><strong>Te avisa, no te bloquea.</strong> Puedes escribir un texto más largo si de verdad lo necesitas.
+          Nada se rompe: simplemente se verá más apretado. Es tu decisión, no un error.</p>
+      </div>
+      <p class="texto-suave">Si el aviso dice «aproximado», significa que en un teléfono cabrá algo menos que en un
+        monitor. Es honesto: el mismo texto se ve distinto en cada pantalla.</p>
+      <h3>Las fechas</h3>
+      <p>Las fechas del evento aparecen en gris y no se pueden escribir: se cambian en el calendario del año. Es a
+        propósito, para que el nombre, la fecha y el contador de la portada nunca digan cosas distintas.</p>
+    </section>
+
+    <section class="manual__paso" id="paso-4">
+      <h2>4 · Poner una imagen</h2>
+      <ol>
+        <li>Pulsa <span class="manual__btn">📎 Adjuntar imagen</span>.</li>
+        <li>Elige el archivo de tu computadora.</li>
+        <li>El dashboard te dirá si sirve: la medida, el peso y si la proporción es la correcta.</li>
+      </ol>
+      <h3>Qué te dirá</h3>
+      <ul>
+        <li><strong>Aceptada.</strong> Verás la miniatura y la ruta donde se publicará.</li>
+        <li><strong>Con aviso.</strong> La acepta pero te dice qué puede salir mal: «algo pequeña, se verá borrosa»,
+          «la proporción no es la esperada, el diseño recortará los bordes».</li>
+        <li><strong>Bloqueada.</strong> Solo cuando rompería la web: un archivo que no es imagen, o una foto tan pesada
+          que tardaría una eternidad en cargar en un teléfono.</li>
+      </ul>
+      <div class="manual__caja manual__caja--ojo">
+        <p><strong>Importante:</strong> la imagen queda en tu biblioteca local, no se sube sola a internet.
+          Al publicar tienes que subir también el archivo a GitHub, con la ruta exacta que te mostrará el dashboard.
+          Si no lo haces, la portada mostrará un hueco.</p>
+      </div>
+      <p class="texto-suave">Consejo: para fotos usa JPG de calidad 80. Para logos con transparencia, PNG. Si puedes,
+        WebP pesa menos y se ve igual.</p>
+    </section>
+
+    <section class="manual__paso" id="paso-5">
+      <h2>5 · Los dos interruptores de cada sección</h2>
+      <p>Cada tarjeta tiene dos casillas, y <strong>no hacen lo mismo</strong>. Esta es la diferencia más importante
+        del dashboard:</p>
+      <h3>◻ Ocultar en mi vista</h3>
+      <p>Es privado. Mientras trabajas en una sección, la escondes de tu vista previa para concentrarte en otra.
+        <strong>El público no se entera.</strong> La sección sigue publicada y visible en internet.</p>
+      <h3>◻ Retirar del sitio</h3>
+      <p>Esto sí es público. La sección dejará de verse para todo el mundo en cuanto subas los cambios a GitHub.
+        Te pedirá confirmación, porque no es lo mismo que ocultarla en tu pantalla.</p>
+      <div class="manual__caja manual__caja--ok">
+        <p><strong>Nada se borra.</strong> Retirar solo desactiva: puedes volver a activarla cuando quieras y todo
+          vuelve a estar como estaba.</p>
+      </div>
+      <p class="texto-suave">La tarjeta «Evento vigente» no tiene interruptor de retirar, y es a propósito: sin ella la
+        portada no tendría nada que contar.</p>
+    </section>
+
+    <section class="manual__paso" id="paso-6">
+      <h2>6 · Ver cómo va quedando</h2>
+      <p>Tienes tres formas, de la más rápida a la más real:</p>
+      <ol>
+        <li><strong>La vista previa de la derecha.</strong> Se actualiza sola mientras escribes. Es para ir viendo.</li>
+        <li><strong>«Ancho completo».</strong> Agranda esa vista previa cuando quieres ver mejor un detalle.</li>
+        <li><strong>«Ver la portada con estos cambios».</strong> Abre la web de verdad, con tu borrador aplicado, en
+          una pestaña nueva. Arriba sale una franja amarilla que dice <em>«Vista previa del borrador · esto NO es lo
+          que ve el público todavía»</em>. Esa franja no aparece nunca en el sitio real.</li>
+      </ol>
+      <p class="texto-suave">Esta vista previa solo funciona en tu computadora y en tu navegador. Nadie más puede
+        verla: no es una versión publicada.</p>
+    </section>
+
+    <section class="manual__paso" id="paso-7">
+      <h2>7 · Publicar los cambios</h2>
+      <p>Cuando estés conforme, entra a la pestaña <strong>Publicar</strong>. Verás una lista de revisión: te avisa
+        si hay algún campo vacío, un texto demasiado largo, una sección retirada o una imagen que falta subir.</p>
+      <div class="manual__caja manual__caja--ojo">
+        <p>Si hay algo en rojo, lo mejor es arreglarlo antes. Pero si decides seguir, el dashboard te deja:
+          <strong>tú mandas</strong>. Solo te avisa para que no te lleves la sorpresa después.</p>
+      </div>
+      <h3>Los tres pasos</h3>
+      <ol>
+        <li><strong>Generar data.js.</strong> Se descarga un archivo a tu carpeta de Descargas.</li>
+        <li><strong>Subirlo a GitHub.</strong> Entra a tu repositorio → <em>Add file</em> → <em>Upload files</em> →
+          arrastra el archivo → <em>Commit changes</em>. Espera a que la bolita se ponga verde (1 o 2 minutos).</li>
+        <li><strong>Comprobarlo en vivo.</strong> Abre la web pública en una ventana de incógnito y confirma que tus
+          cambios están ahí.</li>
+      </ol>
+      <p>Marca cada casilla a medida que lo hagas. <strong>Ninguna se marca sola a propósito:</strong> así nunca creerás
+        que algo está publicado cuando en realidad no lo está.</p>
+      <div class="manual__caja">
+        <p><strong>Truco:</strong> si después de descargar el archivo sigues editando, la barra de estado vuelve a
+          amarillo. Eso significa que el archivo que tienes en Descargas ya no corresponde a lo que ves. Genera uno
+          nuevo antes de subirlo.</p>
+      </div>
+    </section>
+
+    <section class="manual__paso" id="paso-8">
+      <h2>8 · Si algo sale mal</h2>
+      <h3>Me equivoqué al escribir</h3>
+      <p>Pulsa <strong>↶ Deshacer</strong> (o <kbd>Ctrl</kbd>+<kbd>Z</kbd> fuera de un campo de texto). Vuelve atrás
+        hasta 50 pasos. Dentro de un campo, el deshacer normal del navegador funciona como siempre.</p>
+      <h3>Quiero volver completamente a lo publicado</h3>
+      <p>En la pestaña Publicar, botón <strong>«Descartar borrador»</strong>. Todo vuelve a como está en internet ahora
+        mismo. Tus cambios de esta sesión se pierden: hazlo solo si estás seguro.</p>
+      <h3>La barra dice «Todo publicado» pero yo veo otra cosa</h3>
+      <p>Es casi siempre el caché del navegador. Abre la web en una ventana de incógnito o pulsa
+        <kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>R</kbd>.</p>
+      <h3>Me equivoqué con el PIN</h3>
+      <p>Tras varios intentos fallidos el dashboard se bloquea un rato. Espera y vuelve a intentarlo. El PIN nunca se
+        guarda: solo una huella cifrada que no permite recuperarlo.</p>
+    </section>
+
+    <section class="manual__paso" id="paso-9">
+      <h2>9 · Qué NO se puede hacer aquí</h2>
+      <p>Y es a propósito. Todo esto vive en el taller, fuera de la web:</p>
+      <ul>
+        <li><strong>Cambiar colores, tipografías o tamaños.</strong> La identidad visual está cerrada.</li>
+        <li><strong>Mover secciones de sitio.</strong> El orden es siempre el mismo: así la web no se desarma.</li>
+        <li><strong>Cambiar el texto de las páginas interiores</strong> (Eventos, Artistas, Programa, Normas…).
+          Cada una tiene su propio contenido, que se edita en su lugar.</li>
+        <li><strong>Crear páginas nuevas.</strong> Eso es trabajo de taller.</li>
+      </ul>
+      <div class="manual__caja manual__caja--ok">
+        <p>Que no puedas hacer estas cosas es lo que hace que el dashboard sea seguro. Cada cosa que no se puede tocar
+          es un error que no puedes cometer a las once de la noche antes de un evento.</p>
+      </div>
+    </section>
+
+    <div class="manual__volver">
+      <a class="btn btn--primario" href="admin.html">← Volver al dashboard</a>
+      <a class="enlace-flecha" href="index.html" style="margin-inline-start:1rem">Ver la vitrina</a>
+    </div>
+
+  </div>
+</main>
+
+<footer class="pie pie--admin">
+  <div class="contenedor pie__columnas">
+    <div class="pie__marca">
+      <img src="assets/logo-encabezado.png" alt="Nitrotoon" width="120" height="67">
+      <p>Una comunidad de comunidades. Convenciones geek en Venezuela hechas por y para la nave.</p>
+    </div>
+    <nav class="pie__columna" aria-label="La vitrina">
+      <h2 class="pie__titulo">La vitrina</h2>
+      <a href="eventos.html">Eventos</a>
+      <a href="artistas.html">Artistas invitados</a>
+      <a href="programa.html">Programa</a>
+      <a href="galeria.html">Galería «así salió»</a>
+    </nav>
+    <nav class="pie__columna" aria-label="La comunidad">
+      <h2 class="pie__titulo">La comunidad</h2>
+      <a href="normas.html">Normas</a>
+      <a href="aliados.html">Aliados y sponsors</a>
+      <a href="contacto.html">Contacto</a>
+      <a href="roadmap.html">Roadmap de crecimiento</a>
+    </nav>
+  </div>
+  <div class="contenedor pie__final">
+    <p>© 2026 Nitrotoon · Hecho con orgullo geek en Venezuela · <span data-version></span></p>
+    <a class="acceso-admin" href="admin.html">Dashboard</a>
+  </div>
+</footer>
+
+<script src="data.js"></script>
+<script src="js/vitrina.js"></script>
+<script src="js/vistas.js"></script>
+<script src="js/insignia.js"></script>
+</body>
+</html>
+

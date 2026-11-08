@@ -1,0 +1,155 @@
+/* ==========================================================================
+   NITROTOON · base.css — lienzo, tipografía y accesibilidad
+   --------------------------------------------------------------------------
+   Reglas de oro aplicadas aquí (§3):
+   · K2 / §7.2.12 — :focus-visible con contraste ≥3:1, prefers-reduced-motion,
+     contraste AA, lang="es" (en cada HTML), navegación por teclado.
+   · §7.2.1 — ningún color por fuera de los tokens de tokens.css.
+   · Mobile-first (§3.8): las bases están pensadas para el celular.
+   ========================================================================== */
+
+/* ---- Reset ligero ------------------------------------------------------- */
+*, *::before, *::after { box-sizing: border-box; }
+* { margin: 0; }
+html {
+  color-scheme: dark;
+  scroll-behavior: smooth;
+  -webkit-text-size-adjust: 100%;
+}
+img, svg, video, canvas { display: block; max-width: 100%; height: auto; }
+input, button, textarea, select { font: inherit; color: inherit; }
+button { cursor: pointer; background: none; border: none; padding: 0; }
+ul[role="list"], ol[role="list"] { list-style: none; padding: 0; }
+
+/* ---- Lienzo: negro espacial con brillos tenues de la marca -------------- */
+body {
+  background-color: var(--c-fondo);
+  background-image:
+    radial-gradient(52rem 30rem at 88% -6%, var(--dorado-a07), transparent 62%),
+    radial-gradient(44rem 28rem at -12% 22%, var(--verde-a07), transparent 60%);
+  color: var(--c-texto);
+  font-family: var(--t-cuerpo);
+  font-size: var(--fs-cuerpo);
+  line-height: 1.65;
+  min-height: 100vh;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ---- Selección y foco (K2: foco siempre visible, nunca *{outline:0}) ---- */
+::selection { background: var(--c-primario); color: var(--c-negro-puro); }
+
+:focus-visible {
+  outline: 3px solid var(--c-primario);
+  outline-offset: 2px;
+  border-radius: 2px;
+}
+:focus:not(:focus-visible) { outline: none; }
+
+/* ---- Titulares: voz display de la marca --------------------------------- */
+h1, h2, h3, h4 {
+  font-family: var(--t-display);
+  font-weight: 700;
+  line-height: 1.05;
+  letter-spacing: .012em;
+  text-transform: uppercase;
+  text-wrap: balance;
+}
+h1 { font-size: var(--fs-display); }
+h2 { font-size: var(--fs-titulo); }
+h3 { font-size: var(--fs-sub); }
+h4 { font-size: 1rem; letter-spacing: .05em; }
+
+p { overflow-wrap: break-word; }
+strong { color: var(--c-texto); }
+
+a {
+  color: var(--c-primario);
+  text-decoration-thickness: 1px;
+  text-underline-offset: .22em;
+}
+a:hover { color: var(--c-primario-hover); }
+
+abbr[title] { text-decoration: none; }
+
+small, .texto-pequeno { font-size: var(--fs-pequeno); }
+.texto-suave { color: var(--c-perla); }
+.texto-micro {
+  font-size: var(--fs-micro);
+  letter-spacing: .05em;
+  text-transform: uppercase;
+}
+.cifra { font-family: var(--t-tabular); font-variant-numeric: tabular-nums; }
+
+/* Kicker: etiqueta verde ácida que abre cada sección (datos/estados) */
+.kicker {
+  color: var(--c-acento);
+  display: inline-block;
+  font-family: var(--t-display);
+  font-size: var(--fs-micro);
+  letter-spacing: .26em;
+  text-transform: uppercase;
+  margin-block-end: var(--sp-2);
+}
+
+/* ---- Utilidades de layout ------------------------------------------------ */
+.contenedor {
+  width: min(100% - 2.6rem, var(--ancho-max));
+  margin-inline: auto;
+}
+.seccion { padding-block: var(--sp-7); }
+.seccion--compacta { padding-block: var(--sp-6); }
+.lectura { max-width: var(--ancho-lectura); }
+.centrado { text-align: center; }
+
+/* ---- Accesibilidad -------------------------------------------------------- */
+
+/* Mensaje para visitantes sin JavaScript (la vitrina vive en data.js) */
+.aviso-sin-js {
+  border: var(--borde-fino);
+  border-color: var(--c-borde-fuerte);
+  border-radius: var(--radio-m);
+  padding: var(--sp-4);
+  margin-block: var(--sp-4);
+  color: var(--c-perla);
+}
+
+/* Enlace "saltar al contenido": primer tab de cada página */
+.salto-enlace {
+  position: fixed;
+  top: -100%;
+  inset-inline-start: var(--sp-3);
+  z-index: var(--z-skip);
+  background: var(--c-primario);
+  color: var(--c-negro-puro);
+  font-family: var(--t-display);
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: .06em;
+  padding: .7rem 1.2rem;
+  border-radius: 0 0 var(--radio-s) var(--radio-s);
+  text-decoration: none;
+  transition: top var(--d-rapida) var(--e-nitro);
+}
+.salto-enlace:focus { top: 0; color: var(--c-negro-puro); }
+
+/* ---- Barra de scroll con el tema de la marca ----------------------------- */
+::-webkit-scrollbar { width: 12px; }
+::-webkit-scrollbar-track { background: var(--c-fondo); }
+::-webkit-scrollbar-thumb {
+  background: var(--c-superficie-3);
+  border: 3px solid var(--c-fondo);
+  border-radius: 8px;
+}
+::-webkit-scrollbar-thumb:hover { background: var(--c-borde-fuerte); }
+
+/* ---- Movimiento reducido: la experiencia se apaga, la web no (§3.7) ------ */
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  *, *::before, *::after {
+    animation-duration: .01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: .01ms !important;
+  }
+  /* La nave insignia y las estrellas no vuelan si el visitante lo pide */
+  .insignia, .estrellas { display: none !important; }
+}

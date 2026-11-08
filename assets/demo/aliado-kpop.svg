@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 400" role="img" aria-label="Marca demo de Academia K-Pop Venezuela">
+<circle cx="200" cy="200" r="150" fill="none" stroke="#3A3A3A" stroke-width="6"/>
+
+<circle cx="150" cy="270" r="34" fill="none" stroke="#B3B3B3" stroke-width="12"/>
+<circle cx="270" cy="244" r="34" fill="none" stroke="#B3B3B3" stroke-width="12"/>
+<path d="M184 270 V140 L304 112 V244" fill="none" stroke="#B3B3B3" stroke-width="12" stroke-linejoin="round"/>
+</svg>
