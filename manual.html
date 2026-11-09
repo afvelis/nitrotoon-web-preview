@@ -1,6 +1,9 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
+<!-- ═══ [1] · HEAD — METADATOS Y ESTILOS ═══
+     Qué hace: título, descripción SEO, redes y las hojas de estilo de toda la web.
+     Si lo cambias: solo <title> y meta description; el resto afecta al SEO y a los estilos de todas las páginas. -->
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="robots" content="noindex, nofollow"><!-- PREVIEW: no indexar -->
@@ -98,6 +101,9 @@
 <a class="salto-enlace" href="#contenido">Saltar al contenido</a>
 
 <!-- CABECERA: mínima, igual que admin.html (esto no es la vitrina) -->
+<!-- ═══ [2] · TOPE — CABECERA (sin cinta: esto no es la vitrina) ═══
+     Qué hace: cabecera mínima con logo, título de la página y navegación.
+     Si lo cambias: se descuadra la cabecera. Los textos se editan en el HTML, pero la estructura es la de todas las páginas. -->
 <header class="cabecera">
   <div class="contenedor cabecera__fila">
     <a class="marca" href="index.html">
@@ -315,6 +321,9 @@
   </div>
 </main>
 
+<!-- ═══ [5] · PIE DE PÁGINA ═══
+     Qué hace: pie simple con versión de la web y enlaces de vuelta.
+     Si lo cambias: desaparece la vuelta a la vitrina y la versión del pie. -->
 <footer class="pie pie--admin">
   <div class="contenedor pie__columnas">
     <div class="pie__marca">
@@ -342,6 +351,9 @@
   </div>
 </footer>
 
+<!-- ═══ [6] ⚠️ NO TOCAR · SCRIPTS ═══
+     ORDEN CRÍTICO: data.js primero, luego vitrina, vistas y los scripts del dashboard.
+     Si cambias el orden la web se rompe: cada script necesita el anterior. -->
 <script src="data.js"></script>
 <script src="js/vitrina.js"></script>
 <script src="js/vistas.js"></script>

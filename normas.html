@@ -1,6 +1,9 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
+<!-- ═══ [1] · HEAD — METADATOS Y ESTILOS ═══
+     Qué hace: título, descripción SEO, redes y las hojas de estilo de toda la web.
+     Si lo cambias: solo <title> y meta description; el resto afecta al SEO y a los estilos de todas las páginas. -->
 <meta charset="UTF-8">
   <meta name="robots" content="noindex, nofollow">
 <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -21,6 +24,9 @@
 <a class="salto-enlace" href="#contenido">Saltar al contenido</a>
 
 <!-- TOPE FIJO: cinta de entradas + cabecera de marca (una sola pieza sticky) -->
+<!-- ═══ [2] · TOPE — CINTA + CABECERA ═══
+     Qué hace: cinta de entradas y cabecera con logo y navegación; js/vitrina.js rellena nombre, fecha y cuenta del evento vigente desde data.js.
+     Si lo cambias: se descuadra la barra fija de TODAS las páginas. Los textos se editan en data.js, no aquí. -->
 <div class="tope">
 
 <!-- CINTA SUPERIOR: entradas + info del evento vigente (§2, §5.1) -->
@@ -60,6 +66,9 @@
 </div><!-- /tope -->
 
 <!-- MENÚ GIGANTE: agrupado por público, Esc cierra, foco atrapado (§7.2.3) -->
+<!-- ═══ [3] · MENÚ GIGANTE (#mega) ═══
+     Qué hace: menú desplegable a pantalla completa; sus tres grupos los pinta js/vitrina.js desde data.js.
+     Si lo cambias: se rompe el botón «Menú» de todas las páginas. -->
 <div class="mega" id="mega" data-abierto="false" role="dialog" aria-modal="true" aria-label="Menú de la vitrina">
   <div class="contenedor mega__interior">
     <div class="mega__barra">
@@ -67,9 +76,18 @@
       <button class="btn btn--contorno btn--pequeno" id="mega-cerrar" type="button">Cerrar ✕</button>
     </div>
     <div class="mega__grupos">
+      <!-- ═══ [4] ⚠️ NO TOCAR · ZONA: mega-vitrina ═══
+           Qué pinta js/vistas.js aquí: los enlaces de «La vitrina» del menú gigante (salen de data.js).
+           Si cambias el data-zona: esa pieza deja de pintarse y la web queda con el bloque vacío. -->
       <section class="mega__grupo" data-zona="mega-vitrina"></section>
+      <!-- ═══ [4] ⚠️ NO TOCAR · ZONA: mega-publico ═══
+           Qué pinta js/vistas.js aquí: los enlaces por comunidad del menú gigante (salen de data.js).
+           Si cambias el data-zona: esa pieza deja de pintarse y la web queda con el bloque vacío. -->
       <section class="mega__grupo" data-zona="mega-publico"></section>
     </div>
+    <!-- ═══ [4] ⚠️ NO TOCAR · ZONA: mega-puertas ═══
+         Qué pinta js/vistas.js aquí: las 7 puertas del hub dentro del menú gigante (salen de data.js).
+         Si cambias el data-zona: esa pieza deja de pintarse y la web queda con el bloque vacío. -->
     <section class="mega__grupo" data-zona="mega-puertas"></section>
   </div>
 </div>
@@ -95,6 +113,9 @@
         <li><a class="chip" href="#convivencia">Convivencia</a></li>
       </ul>
     </nav>
+    <!-- ═══ [4] ⚠️ NO TOCAR · ZONA: normas ═══
+         Qué pinta js/vistas.js aquí: las secciones de normas sí/no (salen de normas.secciones[] en data.js).
+         Si cambias el data-zona: esa pieza deja de pintarse y la web queda con el bloque vacío. -->
     <div class="normas-grid" data-zona="normas">
   <noscript><p class="aviso-sin-js">Esta pieza de la vitrina se arma con contenido dinámico desde data.js y necesita JavaScript. El resto de la página funciona igual.</p></noscript>
     </div>
@@ -104,6 +125,9 @@
 </main>
 
 <!-- PIE: intranet por evento + acceso discreto al dashboard (§5.9) -->
+<!-- ═══ [5] · PIE DE PÁGINA ═══
+     Qué hace: marca, enlaces de la vitrina, enlaces «Tu evento» (zona intranet), versión y acceso al dashboard.
+     Si lo cambias: se rompe el pie de todas las páginas y desaparece el enlace discreto al dashboard. -->
 <footer class="pie">
   <div class="contenedor">
     <div class="pie__columnas">
@@ -132,6 +156,9 @@
       </nav>
       <nav aria-labelledby="pie-evento">
         <h2 id="pie-evento">Tu evento</h2>
+        <!-- ═══ [4] ⚠️ NO TOCAR · ZONA: intranet ═══
+             Qué pinta js/vistas.js aquí: los enlaces «Tu evento» del pie (salen de intranet.enlaces[] en data.js).
+             Si cambias el data-zona: esa pieza deja de pintarse y la web queda con el bloque vacío. -->
         <ul class="pie__lista" data-zona="intranet"></ul>
       </nav>
     </div>
@@ -142,6 +169,9 @@
   </div>
 </footer>
 
+<!-- ═══ [6] ⚠️ NO TOCAR · SCRIPTS ═══
+     ORDEN CRÍTICO: data.js primero, luego vitrina, vistas, insignia.
+     Si cambias el orden la web se rompe: cada script necesita el anterior. -->
 <script src="data.js"></script>
 <script src="js/vitrina.js"></script>
 <script src="js/vistas.js"></script>

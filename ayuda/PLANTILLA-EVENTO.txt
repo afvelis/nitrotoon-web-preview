@@ -1,0 +1,174 @@
+═══════════════════════════════════════════════════════════════════════════════
+ NITROTOON · PLANTILLA DE EVENTO — lista para copiar dentro de data.js
+═══════════════════════════════════════════════════════════════════════════════
+
+CÓMO USAR ESTA PLANTILLA
+  1. Abre data.js y busca la clave  eventos: [  (Ctrl+F).
+  2. Copia el bloque de abajo y pégalo DENTRO de los corchetes, después del
+     último evento que haya (deja una coma entre un evento y el siguiente).
+  3. Cambia los valores, NO los nombres de campo ni las comas.
+  4. Guarda y abre ayuda/validador.html para comprobar que todo está sano.
+
+CAMPOS REALES (sacados de data.js, ninguno inventado)
+  · El evento del calendario usa 14 campos: id, nombre, tipo, estado,
+    estadoTexto, fechaInicio, fechaFin, lugar, ciudad, descripcion,
+    puertas, entradas, galeria (opcional) y demo.
+  · El hero de la portada añade 5 exclusivos de eventoVigente: ciclo,
+    eslogan, bajada, nivelTexto y entradasNota (más «lugar», que ahí
+    es un texto corto y NO se hereda).
+  En total son 19 campos reales. Si alguna fuente te habla de más campos,
+  no los inventes: consulta ayuda/COMO-EDITAR.md o el validador.
+
+───────────────────────────────────────────────────────────────────────────────
+ EL BLOQUE MODELO, COMENTADO LÍNEA A LÍNEA
+───────────────────────────────────────────────────────────────────────────────
+
+{
+  id: "mi-evento-2027",
+  // ↑ El identificador ÚNICO del evento. Sin espacios, sin tildes, con
+  //   guiones. La portada lo usa para saber cuál evento es el vigente
+  //   (eventoVigente.id debe escribirse EXACTAMENTE igual). Si lo cambias
+  //   después, cámbialo también en eventoVigente o la portada se queda
+  //   apuntando a un evento que ya no existe.
+
+  nombre: "Nombre público del evento",
+  // ↑ Cómo se llama el evento para el público. Aparece en la cinta, el
+  //   hero y el calendario. Entre comillas dobles.
+
+  tipo: "Convención comunitaria",
+  // ↑ El tipo de evento en una frase corta (Torneo, Macro evento anual,
+  //   Convención KPOP…). Es texto libre: se ve bajo el nombre.
+
+  estado: "en-preparacion",
+  // ↑ SOLO 4 valores permitidos (regla K3): a-la-venta, en-preparacion,
+  //   en-negociacion, realizado. NUNCA "proximamente". El estado decide
+  //   qué botones y avisos se pintan; uno inventado rompe eso en silencio.
+
+  estadoTexto: "En preparación con fecha",
+  // ↑ Lo que LEE la gente (esto sí es libre, con tildes si quieres).
+  //   Distinto de «estado»: ese es el código interno, este es la etiqueta.
+
+  fechaInicio: "2027-09-11",
+  // ↑ Primer día del evento, formato AAAA-MM-DD (año-mes-día, con ceros:
+  //   2027-09-11, nunca 11/09/2027). La cuenta regresiva y la cinta
+  //   calculan los días que faltan a partir de esta fecha.
+
+  fechaFin: "2027-09-12",
+  // ↑ Último día, mismo formato. Si el evento dura un solo día puedes
+  //   poner null (sin comillas) o no poner la línea. Ojo: no puede ser
+  //   ANTERIOR a fechaInicio (el validador lo avisa).
+
+  lugar: "Centro de convenciones de tu ciudad",
+  // ↑ La dirección o el recinto, tal como se anuncia. En el calendario es
+  //   el texto completo; nota que en eventoVigente «lugar» es el nombre
+  //   CORTO que se ve en grande (ej. "Valencia") y no se hereda.
+
+  ciudad: "Valencia, Venezuela",
+  // ↑ Ciudad y país. Se hereda al hero si eventoVigente.ciudad vale
+  //   "__HEREDADO__". Entre comillas.
+
+  descripcion: "Dos o tres frases de qué trata el evento. Este texto se ve en la tarjeta del calendario y en los avisos de la portada.",
+  // ↑ La presentación del evento. Texto plano, sin HTML. Entre comillas
+  //   dobles: si tu texto contiene comillas dobles, usa comillas simples
+  //   dentro del texto o el archivo se rompe.
+
+  puertas: ["otaku", "kpop"],
+  // ↑ Qué puertas de la comunidad participan. IDs válidos (los mismos de
+  //   la data): eventos, otaku, gamers, kpop, cosplay, artistas, mercado.
+  //   Una lista vacía [ ] es válida (ej. para un evento ya realizado).
+
+  entradas: false,
+  // ↑ true = se muestran los botones de entradas (evento a-la-venta con
+  //   boletería activa). false = sin venta. Solo ponlo en true cuando la
+  //   taquilla de verdad esté abierta (marca.entradasUrl apunta al sistema
+  //   externo de venta).
+
+  demo: false
+  // ↑ Marca de contenido de DEMOSTRACIÓN. true = texto plausible pero
+  //   ficticio (solo en la fase de pruebas). Para contenido real:
+  //   false. La última línea de un objeto NO lleva coma al final.
+
+} , // ← esta coma separa del siguiente evento; después del ÚLTIMO evento no va coma
+
+───────────────────────────────────────────────────────────────────────────────
+ VARIANTE 1 · Evento con entradas A LA VENTA
+───────────────────────────────────────────────────────────────────────────────
+
+{
+  id: "nitrotoon-fest-2028",
+  nombre: "Nitrotoon Fest 2028",
+  tipo: "Macro evento anual",
+  estado: "a-la-venta",
+  estadoTexto: "Entradas a la venta",
+  fechaInicio: "2028-07-15",
+  fechaFin: "2028-07-16",
+  lugar: "Poliedro de Caracas",
+  ciudad: "Caracas, Venezuela",
+  descripcion: "La gran convención de la comunidad: artistas internacionales, torneos, concurso de cosplay, dance covers y el mercado geek más grande del país.",
+  puertas: ["otaku", "gamers", "kpop", "cosplay", "artistas", "mercado"],
+  entradas: true,
+  demo: false
+},
+
+// Puntos clave: estado "a-la-venta" + entradas: true van SIEMPRE juntos
+// (una venta anunciada sin botón de compra es humo). Revisa también que
+// marca.entradasUrl apunte a la taquilla real.
+
+───────────────────────────────────────────────────────────────────────────────
+ VARIANTE 2 · Evento EN NEGOCIACIÓN (aún SIN fecha)
+───────────────────────────────────────────────────────────────────────────────
+
+{
+  id: "nitrotoon-fest-2029",
+  nombre: "Nitrotoon Fest 2029",
+  tipo: "Macro evento anual",
+  estado: "en-negociacion",
+  estadoTexto: "En negociación — se anuncia con fecha cuando la firma esté lista",
+  fechaInicio: null,
+  fechaFin: null,
+  lugar: "Recinto por confirmar",
+  ciudad: "Caracas, Venezuela",
+  descripcion: "La siguiente edición de la convención estrella. Se anuncia con fecha cuando el contrato esté firmado: cero fechas inventadas.",
+  puertas: ["otaku", "gamers", "kpop", "cosplay", "artistas", "mercado"],
+  entradas: false,
+  demo: false
+},
+
+// Puntos clave: sin fecha, fechaInicio y fechaFin van null (no inventes
+// fechas "aproximadas"). entradas: false sí o sí. Este estado alimenta el
+// aviso verde de la portada («en negociación»). Recuerda: PROHIBIDO
+// "proximamente" — eso lo dice estadoTexto con tus palabras.
+
+───────────────────────────────────────────────────────────────────────────────
+ VARIANTE 3 · Evento REALIZADO (ya pasó)
+───────────────────────────────────────────────────────────────────────────────
+
+{
+  id: "nitrotoon-fest-2026",
+  nombre: "Nitrotoon Fest 2026",
+  tipo: "Macro evento anual",
+  estado: "realizado",
+  estadoTexto: "Realizado",
+  fechaInicio: "2026-07-18",
+  fechaFin: "2026-07-19",
+  lugar: "Poliedro de Caracas",
+  ciudad: "Caracas, Venezuela",
+  descripcion: "La primera gran edición del Fest. Revive cómo salió en la galería.",
+  puertas: [],
+  entradas: false,
+  galeria: "galeria.html",
+  demo: false
+},
+
+// Puntos clave: puertas: [ ] (ya no participa ninguna puerta activa) y
+// entradas: false. El campo OPCIONAL galeria enlaza la sección «así salió»:
+// solo los eventos realizados lo llevan. Si además quieres que la portada
+// muestre el modo «así salió», cambia eventoVigente.ciclo a "post".
+
+═══════════════════════════════════════════════════════════════════════════════
+ RECUERDA AL TERMINAR
+═══════════════════════════════════════════════════════════════════════════════
+  1. Una coma entre eventos; después del ÚLTIMO, ninguna.
+  2. Abre ayuda/validador.html → debe decir «TODO BIEN».
+  3. Recarga la web con Ctrl+F5 y mira el calendario.
+  ¿Dudas? ayuda/COMO-EDITAR.md (receta 1) y ayuda/validador.html te sacan del paso.

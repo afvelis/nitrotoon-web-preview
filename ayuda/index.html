@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="robots" content="noindex, nofollow">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Empieza aquí · Ayuda de mantenimiento · Nitrotoon</title>
+<meta name="description" content="Punto de partida para mantener la web de Nitrotoon: cómo editar data.js sin romper nada, con validador, guía y plantillas.">
+<meta name="theme-color" content="#0A0A0A">
+<link rel="icon" type="image/svg+xml" href="../assets/favicon.svg">
+<link rel="stylesheet" href="../css/tokens.css">
+<link rel="stylesheet" href="../css/base.css">
+<link rel="stylesheet" href="../css/componentes.css">
+<link rel="stylesheet" href="../css/paginas.css">
+<style>
+  /* Estilos propios de la portada de ayuda: solo tokens de la paleta oficial. */
+  .ayuda { max-width: 62rem; }
+  .ayuda__regla {
+    border-left: 3px solid var(--c-primario);
+    background: var(--dorado-a07);
+    border-radius: var(--radio-s);
+    padding: var(--sp-3) var(--sp-4);
+    margin-block: var(--sp-4);
+  }
+  .ayuda__regla strong { font-family: var(--t-display); text-transform: uppercase; letter-spacing: .04em; color: var(--c-primario); }
+  .ayuda__tarjetas { display: grid; gap: var(--sp-3); grid-template-columns: repeat(auto-fit, minmax(15rem, 1fr)); margin-block: var(--sp-4); }
+  .ayuda__tarjeta {
+    display: flex; flex-direction: column; gap: .4rem;
+    background: var(--c-superficie);
+    border: 1px solid var(--c-borde);
+    border-radius: var(--radio-m);
+    padding: var(--sp-4);
+    color: var(--c-texto);
+    text-decoration: none;
+  }
+  .ayuda__tarjeta:hover, .ayuda__tarjeta:focus-visible { border-color: var(--c-borde-fuerte); transform: translateY(-3px); box-shadow: var(--sombra-1); }
+  .ayuda__tarjeta .kicker { color: var(--c-primario); }
+  .ayuda__tarjeta h2 { font-family: var(--t-display); text-transform: uppercase; letter-spacing: .04em; font-size: 1.25rem; margin-block: 0; }
+  .ayuda__tarjeta p { margin-block: 0; color: var(--c-perla); font-size: var(--fs-pequeno); }
+  .ayuda__aviso {
+    border: 1px solid var(--c-borde-fuerte);
+    background: var(--c-superficie);
+    border-radius: var(--radio-s);
+    padding: var(--sp-3) var(--sp-4);
+    margin-block: var(--sp-4);
+  }
+  .ayuda__prohibido ul { padding-inline-start: 1.3rem; color: var(--c-perla); max-width: var(--ancho-lectura, 60ch); }
+  .ayuda__prohibido li { margin-block-end: .4rem; }
+</style>
+</head>
+<body data-pagina="ayuda" data-espacio="nitrotoon">
+
+<a class="salto-enlace" href="#contenido">Saltar al contenido</a>
+
+<header class="cabecera">
+  <div class="contenedor cabecera__fila">
+    <a class="marca" href="../index.html">
+      <img class="marca__logo" src="../assets/logo-encabezado.png" alt="Nitrotoon" width="157" height="88">
+      <span class="marca__lema">Ayuda del mantenimiento</span>
+    </a>
+    <nav class="nav-directa" aria-label="Ayuda">
+      <ul>
+        <li><a href="COMO-EDITAR.md">Cómo editar</a></li>
+        <li><a href="../manual.html">Manual del dashboard</a></li>
+      </ul>
+    </nav>
+  </div>
+</header>
+
+<main id="contenido">
+  <div class="contenedor ayuda">
+
+    <p class="kicker">Ayuda · Nitrotoon</p>
+    <h1>Empieza aquí</h1>
+    <p class="entradilla">Esta carpeta es tu caja de herramientas para mantener la web sin romperla.
+      Todo el contenido de la vitrina vive en un solo archivo: <code>data.js</code>. Si dudas, empieza por la guía.</p>
+
+    <!-- REGLA DE ORO: la única que hace falta memorizar -->
+    <div class="ayuda__regla">
+      <p><strong>La regla de oro</strong></p>
+      <p><strong>Solo editas data.js. Nunca js/*.js, css/* ni las etiquetas data-zona.</strong></p>
+      <p>El diseño y la maquinaria ya están hechos y probados: si tocas esas piezas, la web se puede quedar
+        en blanco o verse rota. Todo lo que se ve en la web se cambia desde <code>data.js</code>.</p>
+    </div>
+
+    <!-- Las 4 herramientas -->
+    <div class="ayuda__tarjetas">
+      <a class="ayuda__tarjeta" href="validador.html">
+        <span class="kicker">Herramienta 1</span>
+        <h2>Validador de data.js</h2>
+        <p>Comprueba si tu data.js está sano antes de publicar: campos que faltan, fechas mal escritas, imágenes que no existen y errores que dejan la web en blanco. Ábrelo siempre después de editar.</p>
+      </a>
+      <a class="ayuda__tarjeta" href="COMO-EDITAR.md">
+        <span class="kicker">Guía 2</span>
+        <h2>Cómo editar (COMO-EDITAR.md)</h2>
+        <p>10 recetas paso a paso para las tareas de siempre: añadir un evento, cambiar una fecha, añadir un artista o una foto, y más. Escrita para quien nunca ha programado.</p>
+      </a>
+      <a class="ayuda__tarjeta" href="PLANTILLA-EVENTO.txt">
+        <span class="kicker">Plantilla 3</span>
+        <h2>Plantilla de evento</h2>
+        <p>Un evento modelo de data.js comentado línea a línea, listo para copiar y pegar, con las 3 variantes de estado (a-la-venta, en-negociacion, realizado).</p>
+      </a>
+      <a class="ayuda__tarjeta" href="../manual.html">
+        <span class="kicker">Manual 4</span>
+        <h2>Manual del dashboard</h2>
+        <p>Si prefieres no editar a mano, usa el dashboard de mantenimiento: cambia textos y fotos con formularios, sin tocar código. Aquí se explica todo, paso a paso.</p>
+      </a>
+    </div>
+
+    <!-- Aviso importante sobre el borrador del dashboard -->
+    <div class="ayuda__aviso">
+      <p><strong>⚠️ Si editas data.js a mano:</strong> el dashboard guarda un <strong>borrador</strong> en tu navegador.
+        Si editas el archivo y luego abres el dashboard, este puede machacar tus cambios con una versión vieja.
+        Antes de abrir el dashboard, bórralo: entra en <code>admin.html</code> → pestaña «Publicar» → botón
+        <strong>«Descartar borrador»</strong>. Detalles en la guía, sección «El dashboard vs editar a mano».</p>
+    </div>
+
+    <!-- Lo que jamás se toca -->
+    <section class="ayuda__prohibido" aria-labelledby="no-hacer">
+      <h2 id="no-hacer">Qué NO hacer (en serio, no)</h2>
+      <ul>
+        <li><strong>No toques los archivos de <code>js/</code></strong> (vitrina.js, vistas.js, admin.js, etc.): son el motor, y un solo carácter cambiado deja la web en blanco.</li>
+        <li><strong>No toques los archivos de <code>css/</code></strong> ni añadas colores nuevos: la paleta está cerrada (dorado #F2B705 y familia) y el árbitro rechaza cualquier azul.</li>
+        <li><strong>No cambies las etiquetas <code>data-zona="…"</code> ni el orden de los <code>&lt;script&gt;</code></code> del final de cada página: así la web sabe qué pintar y en qué orden arrancar.</li>
+        <li><strong>No uses el estado «proximamente» en un evento</strong> (ni ningún estado fuera de los 4 oficiales: a-la-venta, en-preparacion, en-negociacion, realizado). Es la regla K3.</li>
+        <li><strong>No publiques sin pasar por el validador</strong> (<code>ayuda/validador.html</code>): dos minutos de revisión evitan que la web se quede en blanco delante de toda la comunidad.</li>
+      </ul>
+    </section>
+
+  </div>
+</main>
+
+<footer class="pie pie--admin">
+  <div class="contenedor">
+    <p>Ayuda del mantenimiento · Nitrotoon · la regla de oro cabe en una línea: solo se edita data.js.</p>
+    <a class="acceso-admin" href="../index.html">Volver a la vitrina</a>
+  </div>
+</footer>
+
+</body>
+</html>

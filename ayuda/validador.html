@@ -1,0 +1,595 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="robots" content="noindex, nofollow">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Validador de data.js · Nitrotoon · Ayuda</title>
+<meta name="description" content="Comprueba si tu data.js está sano antes de publicar la web de Nitrotoon. Funciona sin conexión y sin instalar nada.">
+<meta name="theme-color" content="#0A0A0A">
+<link rel="icon" type="image/svg+xml" href="../assets/favicon.svg">
+<link rel="stylesheet" href="../css/tokens.css">
+<link rel="stylesheet" href="../css/base.css">
+<link rel="stylesheet" href="../css/componentes.css">
+<style>
+  /* Estilos propios del validador: SOLO tokens de la paleta oficial
+     (tokens.css). El rojo de error es el único color extra y se usa
+     únicamente aquí, para señalar lo que hay que arreglar. */
+  .validador { max-width: 62rem; }
+  .validador__hero { margin-block: var(--sp-4) var(--sp-5); }
+  .v-fatal {
+    border: 2px solid var(--v-rojo, #C4453C);
+    background: var(--c-superficie);
+    border-radius: var(--radio-m);
+    padding: var(--sp-4);
+    margin-block: var(--sp-4);
+  }
+  .v-fatal h2 { font-family: var(--t-display); text-transform: uppercase; letter-spacing: .04em; color: var(--v-rojo, #C4453C); font-size: clamp(1.3rem, 4vw, 2rem); }
+  .v-fatal code, .v-campo { font-family: var(--t-tabular); background: var(--c-superficie-3); border: 1px solid var(--c-borde-fuerte); border-radius: 4px; padding: .05rem .35rem; font-size: .9em; color: var(--c-texto); }
+  .v-fatal pre { background: var(--c-superficie-2); border: 1px solid var(--c-borde); border-radius: var(--radio-s); padding: var(--sp-3); overflow-x: auto; font-size: .9em; color: var(--c-perla); }
+  .v-cat { margin-block-start: var(--sp-4); border-top: 1px solid var(--c-borde-fuerte); padding-block-start: var(--sp-3); }
+  .v-cat h2 { font-size: var(--fs-sub); color: var(--c-primario); margin-block: 0 var(--sp-2); }
+  .v-item { display: grid; grid-template-columns: auto 1fr; gap: .6rem; padding-block: .55rem; border-top: 1px dashed var(--c-borde); }
+  .v-item .v-icono { font-size: 1.15rem; line-height: 1.3; }
+  .v-item--aviso .v-icono, .v-item--error .v-icono { color: var(--v-rojo, #C4453C); }
+  .v-item p { margin-block: .15rem 0; max-width: var(--ancho-lectura, 60ch); }
+  .v-item .v-arreglo { color: var(--c-perla); font-size: var(--fs-pequeno, .9rem); }
+  .v-item--error .v-campo, .v-item--aviso .v-campo { border-color: var(--v-rojo, #C4453C); }
+  .v-resumen {
+    position: sticky; bottom: 0;
+    border: 2px solid var(--c-acento);
+    background: var(--verde-a07);
+    border-radius: var(--radio-m);
+    padding: var(--sp-3) var(--sp-4);
+    margin-block: var(--sp-5) var(--sp-3);
+  }
+  .v-resumen--mal { border-color: var(--v-rojo, #C4453C); background: rgba(196, 69, 60, .10); }
+  .v-resumen strong { font-family: var(--t-display); text-transform: uppercase; letter-spacing: .04em; font-size: clamp(1.1rem, 3.5vw, 1.6rem); color: var(--c-texto); }
+  .v-resumen p { margin-block: .3rem 0; color: var(--c-perla); }
+  .v-oculto { display: none; }
+  @media (prefers-reduced-motion: no-preference) { .v-refrescando { opacity: .5; } }
+</style>
+<script>
+  /* Se instala ANTES de cargar data.js: si data.js tiene un error de
+     sintaxis, aquí queda guardado el mensaje y la línea para explicarlo
+     en cristiano más abajo. */
+  window.__errorDeCarga = null;
+  window.onerror = function (mensaje, fuente, linea, columna) {
+    if (!window.__errorDeCarga) {
+      window.__errorDeCarga = { mensaje: String(mensaje), linea: linea, columna: columna };
+    }
+  };
+</script>
+<script src="../data.js"></script>
+</head>
+<body data-pagina="ayuda" data-espacio="nitrotoon">
+
+<a class="salto-enlace" href="#contenido">Saltar al contenido</a>
+
+<header class="cabecera">
+  <div class="contenedor cabecera__fila">
+    <a class="marca" href="../index.html">
+      <img class="marca__logo" src="../assets/logo-encabezado.png" alt="Nitrotoon" width="157" height="88">
+      <span class="marca__lema">Ayuda del mantenimiento</span>
+    </a>
+    <nav class="nav-directa" aria-label="Ayuda">
+      <ul>
+        <li><a href="index.html">Empieza aquí</a></li>
+        <li><a href="COMO-EDITAR.md">Cómo editar</a></li>
+        <li><a href="../manual.html">Manual del dashboard</a></li>
+      </ul>
+    </nav>
+  </div>
+</header>
+
+<main id="contenido">
+  <div class="contenedor validador">
+
+    <div class="validador__hero">
+      <p class="kicker">Ayuda · Nitrotoon</p>
+      <h1>Revisa tu data.js antes de publicar</h1>
+      <p class="entradilla">Esta página mira tu archivo <code>data.js</code> y te dice en cristiano si algo está mal:
+        qué campo lo tiene, por qué y cómo se arregla. Funciona sin conexión: solo abre este archivo en tu navegador.</p>
+      <noscript><p class="aviso-sin-js">El validador necesita JavaScript para revisar data.js (es su trabajo). Ábrelo con JavaScript activado; mientras tanto, la <a href="index.html">guía de ayuda</a> se lee igual.</p></noscript>
+      <p><button class="btn btn--primario" id="btn-revisar" type="button">Revisar mi data.js</button></p>
+    </div>
+
+    <!-- Resultado fatal: data.js no se pudo leer -->
+    <div class="v-fatal v-oculto" id="panel-fatal" role="alert">
+      <h2>❌ data.js tiene un error y la web se quedará en blanco</h2>
+      <p>El navegador intentó leer <code>data.js</code> y no pudo entenderlo. Cuando eso pasa, <strong>todas las páginas
+        se quedan en blanco</strong>, porque todo el contenido sale de ese archivo.</p>
+      <p><strong>Casi siempre es una de estas tres cosas:</strong></p>
+      <ul>
+        <li>Una <strong>coma</strong> que falta (o sobra) entre dos bloques.</li>
+        <li>Una <strong>llave</strong> <code>{ }</code> o un <strong>corchete</strong> <code>[ ]</code> que se cerró dos veces o ninguna.</li>
+        <li>Una <strong>comilla</strong> <code>" "</code> sin cerrar (o un texto que contiene comillas dobles dentro).</li>
+      </ul>
+      <p><strong>Cómo arreglarlo, paso a paso:</strong></p>
+      <ol>
+        <li>Abre <code>data.js</code> con tu editor de texto.</li>
+        <li>Si abajo te indicamos una línea, ve directo a ella: el error casi siempre está ahí o en la línea de arriba.</li>
+        <li>Compara el bloque con la plantilla comentada <code>ayuda/PLANTILLA-EVENTO.txt</code> y con la guía <code>ayuda/COMO-EDITAR.md</code>.</li>
+        <li>Corrige, guarda, y vuelve a abrir esta página (o pulsa el botón «Revisar mi data.js» de nuevo).</li>
+      </ol>
+      <p id="fatal-detalle" class="v-oculto"></p>
+    </div>
+
+    <!-- Resultados por categoría -->
+    <div id="resultados" aria-live="polite"></div>
+
+    <!-- Resumen final -->
+    <div class="v-resumen v-oculto" id="resumen" role="status"></div>
+
+  </div>
+</main>
+
+<footer class="pie pie--admin">
+  <div class="contenedor">
+    <p>Validador de data.js · herramienta de ayuda de Nitrotoon · no publica nada, solo revisa.</p>
+    <a class="acceso-admin" href="../index.html">Volver a la vitrina</a>
+  </div>
+</footer>
+
+<script>
+(function () {
+  "use strict";
+
+  /* ---- Registro de resultados -------------------------------------------
+     Cada resultado: categoria, nivel ("ok" | "aviso" | "error"),
+     campo (ruta exacta dentro de data.js), mensaje y cómo arreglarlo. */
+  var RESULTADOS = [];
+  var ERRORES = 0, AVISOS = 0;
+
+  var CATEGORIAS = [
+    ["estructura", "1 · Estructura de data.js"],
+    ["eventos",    "2 · Eventos (el calendario)"],
+    ["estados",    "3 · Estados de los eventos (regla K3)"],
+    ["fechas",     "4 · Fechas"],
+    ["ids",        "5 · IDs duplicados"],
+    ["vigente",    "6 · Evento vigente (el que sale en la portada)"],
+    ["artistas",   "7 · Artistas"],
+    ["galeria",    "8 · Galería «así salió»"],
+    ["portada",    "9 · Portada (orden de las piezas)"],
+    ["aliados",    "10 · Aliados"],
+    ["imagenes",   "11 · Imágenes"]
+  ];
+
+  function agregar(cat, nivel, campo, mensaje, arreglo) {
+    if (nivel === "error") ERRORES += 1;
+    if (nivel === "aviso") AVISOS += 1;
+    RESULTADOS.push({ cat: cat, nivel: nivel, campo: campo, mensaje: mensaje, arreglo: arreglo || "" });
+  }
+
+  function ok(cat, campo, mensaje)      { agregar(cat, "ok", campo, mensaje, ""); }
+  function fallo(cat, campo, msg, arr)  { agregar(cat, "error", campo, msg, arr); }
+  function aviso(cat, campo, msg, arr)  { agregar(cat, "aviso", campo, msg, arr); }
+
+  /* ---- Utilidades ------------------------------------------------------- */
+
+  /* Fecha en formato AAAA-MM-DD y de verdad existente (no 2026-02-31). */
+  function fechaValida(t) {
+    if (typeof t !== "string" || !/^\d{4}-\d{2}-\d{2}$/.test(t)) return false;
+    var a = +t.slice(0, 4), m = +t.slice(5, 7), d = +t.slice(8, 10);
+    if (m < 1 || m > 12 || d < 1 || d > 31) return false;
+    var f = new Date(a, m - 1, d);
+    return f.getFullYear() === a && f.getMonth() === m - 1 && f.getDate() === d;
+  }
+
+  /* ---- Comprobación de imágenes -----------------------------------------
+     Con new Image() (funciona abriendo los archivos con file://, sin
+     servidor). Se agrupan TODAS las rutas y cada una se comprueba UNA vez. */
+  var IMAGENES = {}; // ruta -> [dónde se usa]
+
+  function registrarImagen(ruta, referencia) {
+    if (!ruta || typeof ruta !== "string") return;
+    if (/^(https?:|data:|\/\/)/i.test(ruta)) return; /* URLs externas: no se comprueban aquí */
+    var limpia = ruta.replace(/^\.\//, "");
+    if (!IMAGENES[limpia]) IMAGENES[limpia] = [];
+    IMAGENES[limpia].push(referencia);
+  }
+
+  function imagenExiste(ruta) {
+    return new Promise(function (resolver) {
+      var listo = false;
+      var img = new Image();
+      function terminar(resultado) {
+        if (!listo) { listo = true; resolver(resultado); }
+      }
+      img.onload = function () { terminar(true); };
+      img.onerror = function () { terminar(false); };
+      img.src = "../" + ruta;
+      /* Red de seguridad por si file:// no dispara ningún evento */
+      window.setTimeout(function () { terminar(img.complete && img.naturalWidth > 0); }, 5000);
+    });
+  }
+
+  /* ---- Las comprobaciones ------------------------------------------------ */
+
+  function revisarTodo(D) {
+
+    /* 1 · Estructura ------------------------------------------------------ */
+    if (!D || typeof D !== "object" || Array.isArray(D)) {
+      fallo("estructura", "window.NITROTOON_DATA",
+        "data.js cargó, pero no tiene un objeto NITROTOON_DATA que la web pueda usar.",
+        "Abre data.js y mira que al principio diga exactamente «window.NITROTOON_DATA = {» y al final «};».");
+    } else {
+      ok("estructura", "window.NITROTOON_DATA", "data.js se leyó bien y la web tiene contenido que mostrar.");
+    }
+
+    /* 2 · Eventos --------------------------------------------------------- */
+    var eventos = D ? D.eventos : null;
+    if (!Array.isArray(eventos)) {
+      fallo("eventos", "eventos[]",
+        "«eventos» no existe o no es una lista (debe ser una lista entre corchetes [ ]).",
+        "En data.js debe quedar: eventos: [ { … }, { … } ] con una coma entre cada evento.");
+      eventos = [];
+    } else if (eventos.length < 1) {
+      fallo("eventos", "eventos[]",
+        "La lista de eventos está vacía: el calendario saldría sin nada.",
+        "Añade al menos un evento copiando la plantilla de ayuda/PLANTILLA-EVENTO.txt.");
+    } else {
+      ok("eventos", "eventos[]", eventos.length + " evento(s) en el calendario.");
+    }
+
+    var OBLIGATORIOS = ["id", "nombre", "estado", "fechaInicio", "fechaFin", "lugar", "ciudad", "descripcion"];
+    var NOMBRES = { id: "el id (identificador único, sin espacios)", nombre: "el nombre", estado: "el estado", fechaInicio: "la fecha de inicio (AAAA-MM-DD)", fechaFin: "la fecha de fin (AAAA-MM-DD)", lugar: "el lugar", ciudad: "la ciudad", descripcion: "la descripción" };
+    eventos.forEach(function (ev, i) {
+      var donde = "eventos[" + i + "]" + (ev && ev.nombre ? " («" + ev.nombre + "»)" : "");
+      OBLIGATORIOS.forEach(function (campo) {
+        var valor = ev ? ev[campo] : undefined;
+        var vacio = valor === undefined || valor === "" || valor === null;
+        /* fechaFin null se revisa en la categoría de fechas, como aviso */
+        if (vacio && !(campo === "fechaFin" && valor === null)) {
+          fallo("eventos", donde + "." + campo,
+            "A este evento le falta " + NOMBRES[campo] + ".",
+            "Añade la línea «" + campo + ": …» dentro de este evento. Mira cómo se ve en ayuda/PLANTILLA-EVENTO.txt.");
+        }
+      });
+      if (ev && ev.id && typeof ev.id !== "string") {
+        fallo("eventos", donde + ".id", "El id de este evento no es un texto (debe ir entre comillas).", "Escríbelo entre comillas dobles: id: \"mi-evento-2027\".");
+      }
+    });
+
+    /* 3 · Estados (regla K3) ---------------------------------------------- */
+    var ESTADOS = ["a-la-venta", "en-preparacion", "en-negociacion", "realizado"];
+    eventos.forEach(function (ev, i) {
+      var donde = "eventos[" + i + "]" + (ev && ev.nombre ? " («" + ev.nombre + "»)" : "");
+      var estado = ev ? ev.estado : undefined;
+      if (estado === undefined) return; /* ya se avisó como campo que falta */
+      if (ESTADOS.indexOf(estado) === -1) {
+        fallo("estados", donde + ".estado",
+          "El estado \"" + estado + "\" no existe. La regla K3 prohibe «proximamente» y cualquier otro inventado.",
+          "Cámbialo por uno de los 4 permitidos: a-la-venta, en-preparacion, en-negociacion o realizado (exacto, con guiones y sin tildes).");
+      }
+    });
+    if (eventos.length && eventos.every(function (ev) { return ev && ESTADOS.indexOf(ev.estado) !== -1; })) {
+      ok("estados", "eventos[].estado", "Todos los estados son de los 4 permitidos por la regla K3.");
+    }
+
+    /* 4 · Fechas ----------------------------------------------------------- */
+    eventos.forEach(function (ev, i) {
+      var donde = "eventos[" + i + "]" + (ev && ev.nombre ? " («" + ev.nombre + "»)" : "");
+      ["fechaInicio", "fechaFin"].forEach(function (campo) {
+        var valor = ev ? ev[campo] : undefined;
+        if (valor === undefined || valor === null) {
+          if (campo === "fechaFin") {
+            aviso("fechas", donde + ".fechaFin",
+              "Este evento no tiene fecha de fin (está vacía o en null).",
+              "Está permitido mientras el evento solo tenga un día o una fecha sin confirmar; cuando la tengas, escríbela como AAAA-MM-DD.");
+          } else {
+            return; /* ya se avisó como campo obligatorio que falta */
+          }
+        } else if (!fechaValida(valor)) {
+          fallo("fechas", donde + "." + campo,
+            "La fecha \"" + valor + "\" no tiene el formato correcto AAAA-MM-DD.",
+            "Escríbela así: año-mes-día con guiones y ceros a la izquierda, por ejemplo 2027-07-17.");
+        }
+      });
+      if (ev && fechaValida(ev.fechaInicio) && fechaValida(ev.fechaFin) && ev.fechaFin < ev.fechaInicio) {
+        fallo("fechas", donde + ".fechaFin",
+          "La fecha de fin (" + ev.fechaFin + ") es ANTERIOR a la de inicio (" + ev.fechaInicio + ").",
+          "Corrige las dos fechas: el evento no puede terminar antes de empezar.");
+      }
+    });
+
+    /* 5 · IDs duplicados ---------------------------------------------------- */
+    function revisarDuplicados(lista, etiqueta, campoTexto) {
+      var vistos = {};
+      (lista || []).forEach(function (item, i) {
+        var clave = item ? item[campoTexto] : null;
+        if (clave === undefined || clave === null || clave === "") return;
+        if (vistos[clave] !== undefined) {
+          fallo("ids", etiqueta + "[" + i + "]." + campoTexto,
+            "El " + campoTexto + " \"" + clave + "\" está repetido (ya lo usa " + etiqueta + "[" + vistos[clave] + "]).",
+            "Cada " + campoTexto + " debe ser único: cámbiale el nombre a la copia (por ejemplo añadiendo el año).");
+        } else {
+          vistos[clave] = i;
+        }
+      });
+    }
+    revisarDuplicados(eventos, "eventos", "id");
+    revisarDuplicados(D ? D.artistas : null, "artistas", "id");
+    var niveles = D && D.aliados && Array.isArray(D.aliados.niveles) ? D.aliados.niveles : [];
+    niveles.forEach(function (n, i) { revisarDuplicados(n.marcas, "aliados.niveles[" + i + "].marcas", "nombre"); });
+    /* galeria.piezas no usa id; detectamos fotos/pósters repetidos */
+    var piezasGaleria = D && D.galeria && Array.isArray(D.galeria.piezas) ? D.galeria.piezas : [];
+    var vistasGaleria = {};
+    piezasGaleria.forEach(function (p, i) {
+      var clave = p && (p.src || p.poster);
+      if (!clave) return;
+      if (vistasGaleria[clave] !== undefined) {
+        aviso("ids", "galeria.piezas[" + i + "]",
+          "Esta pieza usa la misma imagen que galeria.piezas[" + vistasGaleria[clave] + "] (" + clave + ").",
+          "No rompe la web, pero la galería se verá repetida: sube una imagen distinta o borra la pieza sobrante.");
+      } else {
+        vistasGaleria[clave] = i;
+      }
+    });
+
+    /* 6 · Evento vigente ---------------------------------------------------- */
+    var vigente = D ? D.eventoVigente : null;
+    if (vigente && typeof vigente === "object" && vigente.id) {
+      var elEvento = null, posicion = -1;
+      eventos.forEach(function (ev, i) { if (ev && ev.id === vigente.id) { elEvento = ev; posicion = i; } });
+      if (!elEvento) {
+        fallo("vigente", "eventoVigente.id",
+          "Apunta al evento \"" + vigente.id + "\", pero NO existe ningún evento con ese id en eventos[].",
+          "Corrige el id aquí o cambia el id del evento en eventos[]: deben escribirse exactamente igual.");
+      } else {
+        ok("vigente", "eventoVigente.id", "Apunta al evento \"" + vigente.id + "\" (eventos[" + posicion + "]) y ese evento sí existe.");
+        /* Campos heredados: __HEREDADO__ es lo correcto. Si repite el dato
+           del evento, avisamos: dos copias = una acaba mintiendo. */
+        ["nombre", "fechaInicio", "fechaFin", "ciudad"].forEach(function (campo) {
+          var valor = vigente[campo];
+          if (valor === undefined) return;
+          if (valor === "__HEREDADO__") {
+            ok("vigente", "eventoVigente." + campo, "Correcto: hereda «" + campo + "» del evento del calendario.");
+          } else if (elEvento[campo] === valor) {
+            aviso("vigente", "eventoVigente." + campo,
+              "Repite el mismo dato que eventos[" + posicion + "]." + campo + " en vez de heredarlo.",
+              "Mejor escribe aquí \"__HEREDADO__\": así el dato vive una sola vez y no acabas con dos fechas distintas en la misma web.");
+          } else {
+            aviso("vigente", "eventoVigente." + campo,
+              "Dice «" + valor + "», pero el evento del calendario dice «" + elEvento[campo] + "». El hero mostrará ESTE texto.",
+              "Es válido solo si quieres a propósito un texto distinto arriba. Si no, escribe \"__HEREDADO__\" para heredar del calendario.");
+          }
+        });
+        /* «lugar» NO se hereda a propósito: el hero muestra el nombre corto.
+           No se avisa por él (está documentado en data.js). */
+        if (vigente.ciclo && ["pre", "post", "carrusel"].indexOf(vigente.ciclo) === -1) {
+          aviso("vigente", "eventoVigente.ciclo",
+            "El ciclo \"" + vigente.ciclo + "\" no es de los conocidos.",
+            "Usa pre (antes del evento), post (así salió) o carrusel (varios eventos activos).");
+        }
+      }
+    }
+
+    /* 7 · Artistas ----------------------------------------------------------- */
+    var artistas = D ? D.artistas : null;
+    if (!Array.isArray(artistas)) {
+      aviso("artistas", "artistas[]", "«artistas» no existe o no es una lista.", "Debe ser artistas: [ { … }, { … } ]. Si no tienes invitados aún, déjala así: artistas: [ ].");
+      artistas = [];
+    } else {
+      artistas.forEach(function (ar, i) {
+        var donde = "artistas[" + i + "]" + (ar && ar.nombre ? " («" + ar.nombre + "»)" : "");
+        ["id", "nombre", "rol", "foto"].forEach(function (campo) {
+          var valor = ar ? ar[campo] : undefined;
+          if (valor === undefined || valor === "" || valor === null) {
+            fallo("artistas", donde + "." + campo, "A este artista le falta «" + campo + "».",
+              campo === "foto"
+                ? "Añade la ruta de su foto, por ejemplo foto: \"assets/retrato-xxx.jpg\" (imagen de 800×800)."
+                : "Añade la línea «" + campo + ": …» dentro de esta ficha.");
+          }
+        });
+        if (ar && ar.foto && typeof ar.foto === "string") registrarImagen(ar.foto, donde + ".foto");
+      });
+      if (artistas.length) ok("artistas", "artistas[]", artistas.length + " artista(s) revisado(s) (nombre, rol y foto).");
+    }
+
+    /* 8 · Galería ------------------------------------------------------------ */
+    var galeria = D ? D.galeria : null;
+    if (!galeria || typeof galeria !== "object") {
+      aviso("galeria", "galeria", "No hay sección de galería.", "Es opcional; sin ella, la página galería.html y la sección de la portada saldrán vacías.");
+    } else if (!Array.isArray(galeria.piezas)) {
+      fallo("galeria", "galeria.piezas", "«galeria.piezas» no existe o no es una lista.", "Dentro de galeria debe haber piezas: [ { … }, { … } ].");
+    } else {
+      galeria.piezas.forEach(function (p, i) {
+        var donde = "galeria.piezas[" + i + "]" + (p && p.titulo ? " («" + p.titulo + "»)" : "");
+        if (!p || typeof p !== "object") {
+          fallo("galeria", donde, "Esta pieza de la galería no es un objeto válido.", "Cada pieza debe ser { tipo: …, … } separada por comas.");
+          return;
+        }
+        if (p.tipo === "foto") {
+          if (!p.src) fallo("galeria", donde + ".src", "Es una foto pero no tiene «src» (la ruta de la imagen).", "Añade src: \"assets/…\" con la ruta de la foto.");
+          else registrarImagen(p.src, donde + ".src");
+        } else if (p.tipo === "reel") {
+          if (!p.poster) fallo("galeria", donde + ".poster", "Es un reel pero no tiene «poster» (la imagen de portada del video).", "Añade poster: \"assets/…\" con una imagen vertical 9:16.");
+          else registrarImagen(p.poster, donde + ".poster");
+          if (!p.videoId && !p.url) aviso("galeria", donde, "Este reel no tiene ni «videoId» de YouTube ni «url».", "Al tocarlo no abrirá nada: añade videoId: \"XXXXXXXXXXX\" (el código del video de YouTube) o url: \"https://…\".");
+        } else {
+          fallo("galeria", donde + ".tipo", "El tipo \"" + p.tipo + "\" no es conocido (los válidos son «foto» y «reel»).", "Cambia el tipo a foto o reel, o borra la pieza.");
+        }
+      });
+      ok("galeria", "galeria.piezas[]", galeria.piezas.length + " pieza(s) de galería revisada(s).");
+    }
+
+    /* 9 · Portada (piezas y orden) ------------------------------------------- */
+    var TIPOS = ["hero", "puertas", "avisos", "eventos", "artistas", "galeria", "aliados", "aviso", "tarjeta", "enlace", "cuenta", "reel", "carrusel"];
+    var portada = D ? D.portada : null;
+    if (!portada || typeof portada !== "object") {
+      ok("portada", "portada", "No hay sección «portada»: la web usa el orden por defecto de las piezas. Está bien así.");
+    } else if (!Array.isArray(portada.piezas)) {
+      fallo("portada", "portada.piezas", "«portada.piezas» no existe o no es una lista.", "Dentro de portada debe haber piezas: [ { id: …, tipo: … }, … ].");
+    } else {
+      var visibles = 0, idsPortada = {};
+      portada.piezas.forEach(function (p, i) {
+        var donde = "portada.piezas[" + i + "]";
+        if (!p || typeof p !== "object") {
+          fallo("portada", donde, "Esta pieza de la portada no es un objeto válido.", "Cada pieza debe ser { id: …, tipo: … } separada por comas.");
+          return;
+        }
+        if (!p.id) fallo("portada", donde + ".id", "A esta pieza le falta «id» (su nombre único).", "Añade id: \"…\" con un nombre corto sin espacios, distinto del de las demás piezas.");
+        else {
+          if (idsPortada[p.id] !== undefined) aviso("portada", donde + ".id", "El id \"" + p.id + "\" está repetido en la portada.", "Dos piezas con el mismo id pueden pisarse: cámbiale el nombre a una.");
+          idsPortada[p.id] = i;
+        }
+        if (!p.tipo) fallo("portada", donde + ".tipo", "A esta pieza le falta «tipo» (qué clase de bloque es).", "Añade tipo: \"…\" con uno de los tipos válidos (mira abajo).");
+        else if (TIPOS.indexOf(p.tipo) === -1) {
+          fallo("portada", donde + ".tipo", "El tipo \"" + p.tipo + "\" no existe. Tipos válidos: " + TIPOS.join(", ") + ".", "Corrige el nombre del tipo (exacto, sin tildes) o borra la pieza.");
+        }
+        if (p.visible !== false) visibles += 1;
+      });
+      if (visibles < 1) {
+        aviso("portada", "portada.piezas[].visible", "Ninguna pieza de la portada está visible.", "La portada saldría vacía: pon visible: true en al menos una pieza.");
+      } else {
+        ok("portada", "portada.piezas[]", visibles + " pieza(s) visible(s) en la portada, con tipos conocidos.");
+      }
+    }
+
+    /* 10 · Aliados ------------------------------------------------------------ */
+    if (!D.aliados || typeof D.aliados !== "object" || !Array.isArray(D.aliados.niveles)) {
+      aviso("aliados", "aliados.niveles[]", "No hay lista de niveles de aliados.", "Debe ser aliados: { niveles: [ { marcas: [ … ] }, … ] }.");
+    } else {
+      var totalMarcas = 0;
+      D.aliados.niveles.forEach(function (nivel, i) {
+        var donde = "aliados.niveles[" + i + "]" + (nivel && nivel.nombre ? " («" + nivel.nombre + "»)" : "");
+        if (!nivel || !Array.isArray(nivel.marcas)) {
+          fallo("aliados", donde + ".marcas", "Este nivel no tiene lista de marcas.", "Añade marcas: [ { nombre: …, logo: … } ] dentro del nivel.");
+          return;
+        }
+        nivel.marcas.forEach(function (m, j) {
+          var ref = donde + ".marcas[" + j + "]" + (m && m.nombre ? " («" + m.nombre + "»)" : "");
+          if (!m || typeof m !== "object") { fallo("aliados", ref, "Esta marca no es un objeto válido.", "Cada marca debe ser { nombre: …, logo: … }."); return; }
+          if (!m.nombre) fallo("aliados", ref + ".nombre", "A esta marca le falta el «nombre».", "Añade nombre: \"…\" con el nombre del aliado.");
+          if (!m.logo) fallo("aliados", ref + ".logo", "A esta marca le falta el «logo».", "Añade logo: \"assets/…\" con la ruta de su logo (PNG o SVG, mín. 600×400).");
+          else registrarImagen(m.logo, ref + ".logo");
+          totalMarcas += 1;
+        });
+      });
+      ok("aliados", "aliados.niveles[]", totalMarcas + " marca(s) de aliados revisada(s).");
+    }
+
+    /* 11 · Imágenes (una sola vez cada ruta) ---------------------------------- */
+    return Promise.all(Object.keys(IMAGENES).map(function (ruta) {
+      return imagenExiste(ruta).then(function (existe) {
+        if (!existe) {
+          fallo("imagenes", ruta,
+            "La imagen «" + ruta + "» NO existe en la carpeta assets (la usan: " + IMAGENES[ruta].join(", ") + ").",
+            "Sube el archivo a esa ruta (respetando mayúsculas y minúsculas) o corrige la ruta donde se menciona.");
+        }
+      });
+    })).then(function () {
+      var faltan = RESULTADOS.filter(function (r) { return r.cat === "imagenes" && r.nivel === "error"; }).length;
+      if (Object.keys(IMAGENES).length && !faltan) {
+        ok("imagenes", "assets/", "Todas las imágenes referenciadas existen (" + Object.keys(IMAGENES).length + " comprobadas).");
+      }
+    });
+  }
+
+  /* ---- Pintado de resultados ---------------------------------------------- */
+
+  var ICONOS = { ok: "✅", error: "❌", aviso: "⚠️" };
+
+  function pintar() {
+    var cont = document.getElementById("resultados");
+    cont.textContent = "";
+    var f = document.createDocumentFragment();
+    CATEGORIAS.forEach(function (par) {
+      var items = RESULTADOS.filter(function (r) { return r.cat === par[0]; });
+      if (!items.length) return;
+      var sec = document.createElement("section");
+      sec.className = "v-cat";
+      var h2 = document.createElement("h2");
+      h2.textContent = par[1];
+      sec.appendChild(h2);
+      items.forEach(function (r) {
+        var fila = document.createElement("div");
+        fila.className = "v-item v-item--" + r.nivel;
+        var icono = document.createElement("span");
+        icono.className = "v-icono";
+        icono.textContent = ICONOS[r.nivel];
+        icono.setAttribute("aria-hidden", "true");
+        var cuerpo = document.createElement("div");
+        if (r.campo) {
+          var campo = document.createElement("code");
+          campo.className = "v-campo";
+          campo.textContent = r.campo;
+          cuerpo.appendChild(campo);
+        }
+        var p = document.createElement("p");
+        p.textContent = r.mensaje;
+        cuerpo.appendChild(p);
+        if (r.arreglo) {
+          var arr = document.createElement("p");
+          arr.className = "v-arreglo";
+          arr.textContent = "👉 Cómo arreglarlo: " + r.arreglo;
+          cuerpo.appendChild(arr);
+        }
+        fila.appendChild(icono);
+        fila.appendChild(cuerpo);
+        sec.appendChild(fila);
+      });
+      f.appendChild(sec);
+    });
+    cont.appendChild(f);
+
+    /* Resumen final grande */
+    var res = document.getElementById("resumen");
+    res.classList.remove("v-oculto", "v-resumen--mal");
+    res.textContent = "";
+    var fuerte = document.createElement("strong");
+    if (ERRORES === 0) {
+      res.classList.remove("v-resumen--mal");
+      fuerte.textContent = "✅ TODO BIEN: tu data.js está sano";
+      res.appendChild(fuerte);
+      var lineaOk = document.createElement("p");
+      lineaOk.textContent = (AVISOS ? AVISOS + " aviso(s) para mejorar (no urgente). " : "") + "Puedes publicar. Igual haz las 3 comprobaciones de la guía antes de subir a GitHub.";
+      res.appendChild(lineaOk);
+    } else {
+      res.classList.add("v-resumen--mal");
+      fuerte.textContent = "❌ " + ERRORES + " ERROR(ES) en tu data.js";
+      res.appendChild(fuerte);
+      var linea = document.createElement("p");
+      linea.textContent = (AVISOS ? AVISOS + " aviso(s) aparte. " : "") + "Arregla los puntos marcados con ❌ antes de publicar: mientras existan, la web se ve mal o se queda en blanco.";
+      res.appendChild(linea);
+    }
+  }
+
+  function pintarFatal(detalleError) {
+    document.getElementById("panel-fatal").classList.remove("v-oculto");
+    var res = document.getElementById("resumen");
+    res.classList.add("v-oculto");
+    if (detalleError && detalleError.linea) {
+      var det = document.getElementById("fatal-detalle");
+      det.classList.remove("v-oculto");
+      det.textContent = "";
+      var pre = document.createElement("pre");
+      pre.textContent = "Detalle técnico (para tu IA de ayuda): " + detalleError.mensaje +
+        (detalleError.linea ? " — cerca de data.js, línea " + detalleError.linea : "");
+      det.appendChild(pre);
+    }
+  }
+
+  function revisar() {
+    ERRORES = 0; AVISOS = 0; RESULTADOS = []; IMAGENES = {};
+    document.getElementById("panel-fatal").classList.add("v-oculto");
+    document.getElementById("resultados").textContent = "";
+    document.getElementById("resumen").classList.add("v-oculto");
+
+    if (!window.NITROTOON_DATA || typeof window.NITROTOON_DATA !== "object") {
+      pintarFatal(window.__errorDeCarga);
+      return;
+    }
+    Promise.resolve(revisarTodo(window.NITROTOON_DATA)).then(pintar).catch(function (e) {
+      fallo("estructura", "revisión general", "Ocurrió un problema al revisar: " + (e && e.message ? e.message : e), "Puede ser un dato de un tipo raro (por ejemplo un número donde va un texto). Compara tu data.js con ayuda/PLANTILLA-EVENTO.txt.");
+      pintar();
+    });
+  }
+
+  document.getElementById("btn-revisar").addEventListener("click", revisar);
+  revisar(); /* también se revisa solo al abrir la página */
+})();
+</script>
+</body>
+</html>
